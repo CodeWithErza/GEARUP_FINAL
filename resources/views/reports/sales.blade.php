@@ -1,13 +1,15 @@
 <x-dashboard-layout :title="'Sales Reports'" :icon="'fa-solid fa-chart-line'">
     <div class="container-fluid">
         <!-- Filters and Export Options -->
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
                         <form class="row g-3" method="GET">
                             <div class="col-md-4">
-                                <label for="date-range" class="form-label">Date Range</label>
+                                <label for="date-range" class="form-label">
+                                    Date Range
+                                </label>
                                 <select class="form-select" id="date-range" name="date_range">
                                     <option value="today">Today</option>
                                     <option value="yesterday">Yesterday</option>
@@ -20,7 +22,9 @@
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <label for="product-category" class="form-label">Product Category</label>
+                                <label for="product-category" class="form-label">
+                                    Product Category
+                                </label>
                                 <select class="form-select" id="product-category" name="product_category">
                                     <option value="all" selected>All Categories</option>
                                     <option value="interior">Interior</option>
@@ -32,6 +36,26 @@
                             <div class="col-md-4 d-flex align-items-end">
                                 <button type="submit" class="btn btn-accent w-100">Apply Filters</button>
                             </div>
+                            
+                            <!-- Custom Date Range Fields (hidden by default) -->
+                            <div class="col-md-12 mt-3 custom-date-range-container" style="display: none;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="start_date" class="form-label">
+                                            Start Date
+                                            <i class="fas fa-info-circle ms-1 tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="First day to include in the report"></i>
+                                        </label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="end_date" class="form-label">
+                                            End Date
+                                            <i class="fas fa-info-circle ms-1 tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Last day to include in the report"></i>
+                                        </label>
+                                        <input type="date" class="form-control" id="end_date" name="end_date">
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -41,13 +65,13 @@
                     <div class="card-body">
                         <label class="form-label">Export Options</label>
                         <div class="d-flex gap-2">
-                            <a href="#" id="export-pdf" class="btn btn-danger flex-grow-1">
+                            <a href="#" id="export-pdf" class="btn btn-danger flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Export current report data as PDF document">
                                 <i class="fas fa-file-pdf me-1"></i> PDF
                             </a>
-                            <a href="#" id="export-excel" class="btn btn-success flex-grow-1">
+                            <a href="#" id="export-excel" class="btn btn-success flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Export current report data as Excel spreadsheet">
                                 <i class="fas fa-file-excel me-1"></i> Excel
                             </a>
-                            <a href="#" onclick="window.print();" class="btn btn-secondary flex-grow-1">
+                            <a href="#" onclick="window.print();" class="btn btn-secondary flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Print current report view">
                                 <i class="fas fa-print me-1"></i> Print
                             </a>
                         </div>
@@ -57,46 +81,58 @@
         </div>
 
         <!-- Sales Summary Cards -->
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-md-3">
-                <div class="card text-bg-primary">
+                <div class="card bg-dark text-white">
                     <div class="card-body">
-                        <h5 class="card-title text-white">Total Sales</h5>
+                        <h5 class="card-title" style="color: #FFE45C;">
+                            Total Sales
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="The sum of all sales for the selected period"></i>
+                        </h5>
                         <h2 class="card-text fw-bold text-white" id="total-sales-card">₱0.00</h2>
-                        <p class="card-text text-white" id="total-sales-change">
+                        <p class="card-text text-secondary small" id="total-sales-change" style="margin-bottom: 0;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-bg-success">
+                <div class="card bg-dark text-white">
                     <div class="card-body">
-                        <h5 class="card-title text-white">Total Orders</h5>
+                        <h5 class="card-title" style="color: #FFE45C;">
+                            Total Orders
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Number of completed orders in the selected period"></i>
+                        </h5>
                         <h2 class="card-text fw-bold text-white" id="total-orders-card">0</h2>
-                        <p class="card-text text-white" id="total-orders-change">
+                        <p class="card-text text-secondary small" id="total-orders-change" style="margin-bottom: 0;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-bg-warning">
+                <div class="card bg-dark text-white">
                     <div class="card-body">
-                        <h5 class="card-title text-white">Average Order Value</h5>
+                        <h5 class="card-title" style="color: #FFE45C;">
+                            Average Order Value
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Average amount spent per order"></i>
+                        </h5>
                         <h2 class="card-text fw-bold text-white" id="avg-order-value-card">₱0.00</h2>
-                        <p class="card-text text-white" id="avg-order-value-change">
+                        <p class="card-text text-secondary small" id="avg-order-value-change" style="margin-bottom: 0;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card text-bg-info">
+                <div class="card bg-dark text-white">
                     <div class="card-body">
-                        <h5 class="card-title text-white">Total Products Sold</h5>
+                        <h5 class="card-title" style="color: #FFE45C;">
+                            Total Products Sold
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Total quantity of products sold in the selected period"></i>
+                        </h5>
                         <h2 class="card-text fw-bold text-white" id="total-products-card">0</h2>
-                        <p class="card-text text-white" id="total-products-change">
+                        <p class="card-text text-secondary small" id="total-products-change" style="margin-bottom: 0;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
@@ -105,14 +141,17 @@
         </div>
 
         <!-- Sales Data Tables Section -->
-        <div class="row mb-4">
+        <div class="row mb-3">
             <!-- Total Sales Table -->
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Total Sales by Category</h5>
+                        <h5 class="card-title mb-0">
+                            Total Sales by Category
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Breakdown of sales by product category"></i>
+                        </h5>
                         <div class="dropdown">
-                            <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" style="background-color: #FFE45C; color: #212529; font-weight: 500;">
+                            <button class="btn btn-sm dropdown-toggle" id="categoryDateRangeButton" type="button" data-bs-toggle="dropdown" style="background-color: #FFE45C; color: #212529; font-weight: 500;">
                                 This Month
                             </button>
                             <ul class="dropdown-menu dropdown-menu-dark">
@@ -192,7 +231,7 @@
         </div>
 
         <!-- Chart Section -->
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header bg-white">
@@ -216,11 +255,14 @@
         </div>
 
         <!-- Sales Table -->
-        <div class="row mb-4">
+        <div class="row mb-3">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Sales Details</h5>
+                        <h5 class="card-title mb-0">
+                            Sales Details
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Detailed breakdown of sales by product"></i>
+                        </h5>
                         <div class="d-flex gap-2">
                             <select class="form-select form-select-sm" id="sales-date-range" style="background-color: #FFE45C; color: #212529; border-color: #FFE45C; font-weight: 500; width: auto;">
                                 <option value="today">Today</option>
@@ -230,6 +272,7 @@
                                 <option value="this_month" selected>This Month</option>
                                 <option value="last_month">Last Month</option>
                                 <option value="this_year">This Year</option>
+                                <option value="custom">Custom Range</option>
                             </select>
                             <form method="GET" class="mb-0 d-flex gap-2">
                                 <input type="search" class="form-control form-control-sm" id="sales-search" name="search" placeholder="Search products or categories...">
@@ -237,6 +280,20 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <!-- Custom Date Range for Sales Details (hidden by default) -->
+                        <div class="row mb-3 sales-details-custom-date" style="display: none;">
+                            <div class="col-md-5">
+                                <label for="sales_start_date" class="form-label">Start Date</label>
+                                <input type="date" class="form-control form-control-sm" id="sales_start_date">
+                            </div>
+                            <div class="col-md-5">
+                                <label for="sales_end_date" class="form-label">End Date</label>
+                                <input type="date" class="form-control form-control-sm" id="sales_end_date">
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="button" class="btn btn-sm btn-accent w-100" id="apply-custom-sales-dates">Apply</button>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-hover" id="sales-details-table">
                                 <thead>
@@ -381,7 +438,7 @@
         }
 
         // Function to load sales details
-        function loadSalesDetails(page = 1) {
+        function loadSalesDetails(page = 1, customStartDate = null, customEndDate = null) {
                 const dateRange = document.getElementById('sales-date-range').value;
                 const search = document.getElementById('sales-search').value;
                 
@@ -397,7 +454,24 @@
                     </tr>
                 `;
 
-                fetch(`/reports/sales-details?date_range=${dateRange}&search=${search}&page=${page}`)
+                // Build URL with parameters
+                let url = `/reports/sales-details?date_range=${dateRange}&search=${search}&page=${page}`;
+                
+                // Add custom date parameters if provided
+                if (dateRange === 'custom') {
+                    if (customStartDate && customEndDate) {
+                        url += `&start_date=${customStartDate}&end_date=${customEndDate}`;
+                    } else {
+                        // Try to get dates from the inputs
+                        const startDate = document.getElementById('sales_start_date').value;
+                        const endDate = document.getElementById('sales_end_date').value;
+                        if (startDate && endDate) {
+                            url += `&start_date=${startDate}&end_date=${endDate}`;
+                        }
+                    }
+                }
+
+                fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         tbody.innerHTML = '';
@@ -411,6 +485,9 @@
                                     </td>
                                 </tr>
                             `;
+                            // Reset totals to 0 when no data is found
+                            document.getElementById('totalQtySold').textContent = '0';
+                            document.getElementById('totalSalesAmount').textContent = formatCurrency(0);
                             return;
                         }
 
@@ -427,12 +504,12 @@
                             tbody.appendChild(row);
                         });
 
-                        // Calculate and display totals
-                        const totalQtySold = data.sales_details.data.reduce((sum, item) => sum + item.total_quantity, 0);
-                        const totalSalesAmount = data.sales_details.data.reduce((sum, item) => sum + item.total_sales, 0);
+                        // Use summary data for totals (all matching records, not just current page)
+                        const totalQuantity = data.summary && data.summary.total_quantity ? data.summary.total_quantity : 0;
+                        const totalSales = data.summary && data.summary.total_sales ? data.summary.total_sales : 0;
                         
-                        document.getElementById('totalQtySold').textContent = totalQtySold.toLocaleString();
-                        document.getElementById('totalSalesAmount').textContent = formatCurrency(totalSalesAmount);
+                        document.getElementById('totalQtySold').textContent = totalQuantity.toLocaleString();
+                        document.getElementById('totalSalesAmount').textContent = formatCurrency(totalSales);
 
                         // Update pagination
                         const pagination = document.getElementById('sales-details-pagination');
@@ -491,6 +568,39 @@
             document.getElementById('sales-search').addEventListener('input', function() {
                 clearTimeout(searchTimeout);
                 searchTimeout = setTimeout(() => loadSalesDetails(1), 300);
+            });
+
+            // Toggle custom date range for sales details
+            const salesDateRangeSelect = document.getElementById('sales-date-range');
+            const salesDetailsCustomDate = document.querySelector('.sales-details-custom-date');
+            
+            // Check if custom date range is selected on page load for sales details
+            if (salesDateRangeSelect.value === 'custom') {
+                salesDetailsCustomDate.style.display = 'flex';
+            }
+            
+            // Toggle custom date range fields when sales details dropdown changes
+            salesDateRangeSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    salesDetailsCustomDate.style.display = 'flex';
+                } else {
+                    salesDetailsCustomDate.style.display = 'none';
+                    loadSalesDetails(1);
+                }
+            });
+            
+            // Handle custom date range apply button click
+            document.getElementById('apply-custom-sales-dates').addEventListener('click', function() {
+                const startDate = document.getElementById('sales_start_date').value;
+                const endDate = document.getElementById('sales_end_date').value;
+                
+                if (!startDate || !endDate) {
+                    alert('Please select both start and end dates');
+                    return;
+                }
+                
+                // Load sales details with custom date range
+                loadSalesDetails(1, startDate, endDate);
             });
 
             // Load initial sales details
@@ -661,9 +771,9 @@
                     })}`;
 
                     // Update the dropdown button text
-                    const dropdownButton = document.querySelector('.dropdown-toggle');
+                    const dropdownButton = document.querySelector('#categoryDateRangeButton');
                     const selectedOption = document.querySelector(`.dropdown-item[data-range="${dateRange}"]`);
-                    if (selectedOption) {
+                    if (selectedOption && dropdownButton) {
                         dropdownButton.textContent = selectedOption.textContent;
                     }
                 })
@@ -917,6 +1027,24 @@
             loadSalesSummary();
             document.getElementById('date-range').addEventListener('change', loadSalesSummary);
             document.getElementById('product-category').addEventListener('change', loadSalesSummary);
+            
+            // Toggle custom date range fields visibility
+            const dateRangeSelect = document.getElementById('date-range');
+            const customDateRangeContainer = document.querySelector('.custom-date-range-container');
+            
+            // Check if custom date range is selected on page load
+            if (dateRangeSelect.value === 'custom') {
+                customDateRangeContainer.style.display = 'block';
+            }
+            
+            // Toggle custom date range fields when dropdown changes
+            dateRangeSelect.addEventListener('change', function() {
+                if (this.value === 'custom') {
+                    customDateRangeContainer.style.display = 'block';
+                } else {
+                    customDateRangeContainer.style.display = 'none';
+                }
+            });
         });
     </script>
 
@@ -928,8 +1056,23 @@
             // Get current filter values
             const dateRange = document.getElementById('date-range').value;
             const productCategory = document.getElementById('product-category').value;
-            // Build the export URL (corrected route)
-            const url = `/reports/export/pdf?date_range=${encodeURIComponent(dateRange)}&product_category=${encodeURIComponent(productCategory)}`;
+            
+            // Build the export URL with base parameters
+            let url = `/reports/export/pdf?date_range=${encodeURIComponent(dateRange)}&product_category=${encodeURIComponent(productCategory)}`;
+            
+            // Add custom date parameters if custom range is selected
+            if (dateRange === 'custom') {
+                const startDate = document.getElementById('start_date').value;
+                const endDate = document.getElementById('end_date').value;
+                
+                if (startDate && endDate) {
+                    url += `&start_date=${encodeURIComponent(startDate)}&end_date=${encodeURIComponent(endDate)}`;
+                } else {
+                    alert('Please select both start and end dates for custom range export');
+                    return;
+                }
+            }
+            
             window.open(url, '_blank');
         });
     });
@@ -943,8 +1086,23 @@
             // Get current filter values
             const dateRange = document.getElementById('date-range').value;
             const productCategory = document.getElementById('product-category').value;
-            // Build the export URL (corrected route)
-            const url = `/reports/export/excel?date_range=${encodeURIComponent(dateRange)}&product_category=${encodeURIComponent(productCategory)}`;
+            
+            // Build the export URL with base parameters
+            let url = `/reports/export/excel?date_range=${encodeURIComponent(dateRange)}&product_category=${encodeURIComponent(productCategory)}`;
+            
+            // Add custom date parameters if custom range is selected
+            if (dateRange === 'custom') {
+                const startDate = document.getElementById('start_date').value;
+                const endDate = document.getElementById('end_date').value;
+                
+                if (startDate && endDate) {
+                    url += `&start_date=${encodeURIComponent(startDate)}&end_date=${encodeURIComponent(endDate)}`;
+                } else {
+                    alert('Please select both start and end dates for custom range export');
+                    return;
+                }
+            }
+            
             window.open(url, '_blank');
         });
     });

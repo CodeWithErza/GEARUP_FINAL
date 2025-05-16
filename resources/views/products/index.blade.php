@@ -3,20 +3,20 @@
         <!-- Action Buttons -->
         <div class="row mb-4">
             <div class="col-md-6">
-                <button type="button" class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                <button type="button" class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#addProductModal" data-bs-toggle="tooltip" title="Add a new product to your inventory">
                     <i class="fas fa-plus"></i> Add New Product
                 </button>
             </div>
             <div class="col-md-6">
                 <div class="input-group">
-                    <select class="form-select category-filter" id="categoryFilter" style="max-width: 200px;">
+                    <select class="form-select category-filter" id="categoryFilter" style="max-width: 200px;" data-bs-toggle="tooltip" title="Filter products by category">
                         <option value="">All Categories</option>
                         @foreach($categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </select>
                     <input type="text" class="form-control search-input" id="searchInput" placeholder="Search products...">
-                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                    <button class="btn btn-outline-secondary" type="button" id="searchButton" data-bs-toggle="tooltip" title="Search for products by name, SKU, or brand">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -28,9 +28,12 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Products Directory</h5>
+                        <h5 class="card-title mb-0">
+                            Products Directory
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Complete list of all products in your inventory"></i>
+                        </h5>
                         <div>
-                            <select class="form-select form-select-sm sort-select" id="sortSelect">
+                            <select class="form-select form-select-sm sort-select" id="sortSelect" data-bs-toggle="tooltip" title="Change how products are sorted in the list">
                                 <option value="status_name_asc">Status & Name (A-Z)</option>
                                 <option value="status_name_desc">Status & Name (Z-A)</option>
                                 <option value="status_stock_low">Status & Low Stock First</option>
@@ -147,7 +150,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-light">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="addProductModalLabel"><i class="fas fa-plus-circle me-2"></i>Add New Product</h5>
+                    <h5 class="modal-title" id="addProductModalLabel">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        Add New Product
+                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Add a new product to your inventory system"></i>
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -364,6 +371,27 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            
+            // Re-initialize tooltips after dynamic content is loaded
+            const addProductModal = document.getElementById('addProductModal');
+            if (addProductModal) {
+                addProductModal.addEventListener('shown.bs.modal', function() {
+                    const modalTooltips = addProductModal.querySelectorAll('[data-bs-toggle="tooltip"]');
+                    [...modalTooltips].forEach(tooltipTrigger => new bootstrap.Tooltip(tooltipTrigger));
+                });
+            }
+            
+            const editProductModal = document.getElementById('editProductModal');
+            if (editProductModal) {
+                editProductModal.addEventListener('shown.bs.modal', function() {
+                    const modalTooltips = editProductModal.querySelectorAll('[data-bs-toggle="tooltip"]');
+                    [...modalTooltips].forEach(tooltipTrigger => new bootstrap.Tooltip(tooltipTrigger));
+                });
+            }
+            
             // Initialize forms and inputs
             const addProductForm = document.getElementById('addProductForm');
             const editProductForm = document.getElementById('editProductForm');

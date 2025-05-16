@@ -3,7 +3,7 @@
         <!-- Quick Action Cards -->
         <div class="row mb-3">
             <div class="col-md-4 mb-3 mb-md-0">
-                <a href="{{ route('inventory.stock-in') }}" class="text-decoration-none">
+                <a href="{{ route('inventory.stock-in') }}" class="text-decoration-none" data-bs-toggle="tooltip" title="Record new inventory received from suppliers">
                     <div class="card shadow-sm hover-card h-100 border-0" style="background-color: #2A2A2A;">
                         <div class="card-body d-flex align-items-center p-3">
                             <div class="rounded-circle me-3 d-flex align-items-center justify-content-center" 
@@ -19,7 +19,7 @@
                 </a>
             </div>
             <div class="col-md-4 mb-3 mb-md-0">
-                <a href="{{ route('inventory.stock-out') }}" class="text-decoration-none">
+                <a href="{{ route('inventory.stock-out') }}" class="text-decoration-none" data-bs-toggle="tooltip" title="Record inventory removed for reasons other than sales">
                     <div class="card shadow-sm hover-card h-100 border-0" style="background-color: #2A2A2A;">
                         <div class="card-body d-flex align-items-center p-3">
                             <div class="rounded-circle me-3 d-flex align-items-center justify-content-center" 
@@ -35,7 +35,7 @@
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="{{ route('suppliers.index') }}" class="text-decoration-none">
+                <a href="{{ route('suppliers.index') }}" class="text-decoration-none" data-bs-toggle="tooltip" title="View and manage your product suppliers">
                     <div class="card shadow-sm hover-card h-100 border-0" style="background-color: #2A2A2A;">
                         <div class="card-body d-flex align-items-center p-3">
                             <div class="rounded-circle me-3 d-flex align-items-center justify-content-center" 
@@ -58,7 +58,10 @@
                 <div class="card shadow-sm h-100 border-0" style="background-color: #2A2A2A;">
                     <div class="card-body py-2">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="card-subtitle text-white fw-semibold">Inventory Value</h6>
+                            <h6 class="card-subtitle text-white fw-semibold">
+                                Inventory Value
+                                <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Total value of all products in inventory at current prices"></i>
+                            </h6>
                             <div class="rounded-circle d-flex align-items-center justify-content-center" 
                                  style="width: 40px; height: 40px; background-color: #000000;">
                                 <i class="fas fa-dollar-sign fa-lg" style="color: #FFE45C;"></i>
@@ -76,7 +79,10 @@
                 <div class="card shadow-sm h-100 border-0" style="background-color: #2A2A2A;">
                     <div class="card-body py-2">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="card-subtitle text-white fw-semibold">Stock Status</h6>
+                            <h6 class="card-subtitle text-white fw-semibold">
+                                Stock Status
+                                <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Overview of product stock levels by category"></i>
+                            </h6>
                             <div class="rounded-circle d-flex align-items-center justify-content-center" 
                                  style="width: 40px; height: 40px; background-color: #000000;">
                                 <i class="fas fa-boxes fa-lg" style="color: #FFE45C;"></i>
@@ -103,7 +109,10 @@
                 <div class="card shadow-sm h-100 border-0" style="background-color: #2A2A2A;">
                     <div class="card-body py-2">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="card-subtitle text-white fw-semibold">Monthly Movement</h6>
+                            <h6 class="card-subtitle text-white fw-semibold">
+                                Monthly Movement
+                                <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Number of inventory transactions this month"></i>
+                            </h6>
                             <div class="rounded-circle d-flex align-items-center justify-content-center" 
                                  style="width: 40px; height: 40px; background-color: #000000;">
                                 <i class="fas fa-exchange-alt fa-lg" style="color: #FFE45C;"></i>
@@ -130,6 +139,7 @@
                             <h5 class="card-title mb-0 fw-bold text-white">
                                 <i class="fas fa-boxes-stacked me-2" style="color: #FFE45C;"></i>
                                 Low Stock Items
+                                <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Products that are below their reorder level"></i>
                             </h5>
                         </div>
                     </div>
@@ -159,7 +169,7 @@
                         </div>
                     </div>
                     <div class="card-footer text-center py-2 border-top-0" style="background-color: #2A2A2A;">
-                        <a href="{{ route('products.index') }}?filter=low-stock" class="text-accent text-decoration-none fw-semibold" style="color: #FFE45C;">
+                        <a href="{{ route('products.index') }}?filter=low-stock" class="text-accent text-decoration-none fw-semibold" style="color: #FFE45C;" data-bs-toggle="tooltip" title="See all products that need to be restocked">
                             View All Low Stock Items
                             <i class="fas fa-chevron-right ms-1 small"></i>
                         </a>
@@ -174,6 +184,7 @@
                         <h5 class="card-title mb-0 fw-bold text-white">
                             <i class="fas fa-history me-2" style="color: #FFE45C;"></i>
                             Recent Inventory Activity
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Latest inventory transactions and adjustments"></i>
                         </h5>
                     </div>
                     <div class="card-body p-0 overflow-auto" style="max-height: 350px;">
@@ -292,4 +303,14 @@
             background: #666666;
         }
     </style>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        });
+    </script>
+    @endpush
 </x-dashboard-layout> 

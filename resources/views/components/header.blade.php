@@ -28,7 +28,7 @@
                     <div class="dropdown-user-name">{{ Auth::user()->name }}</div>
                 </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#"><i class="fas fa-user-cog me-2"></i> Profile Settings</a></li>
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileViewModal"><i class="fas fa-user me-2"></i> View Profile</a></li>
                 <li>
                     <form method="POST" action="{{ route('logout') }}" class="dropdown-item-form">
                         @csrf

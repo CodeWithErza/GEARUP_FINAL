@@ -10,7 +10,7 @@
             <div class="col-md-6">
                 <div class="input-group">
                     <input type="text" class="form-control search-input" placeholder="Search suppliers...">
-                    <button class="btn btn-outline-secondary" type="button">
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="tooltip" title="Search for suppliers by name, contact person, or code">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -22,9 +22,12 @@
             <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">Suppliers Directory</h5>
+                        <h5 class="card-title mb-0">
+                            Suppliers Directory
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="List of all suppliers with contact information and status"></i>
+                        </h5>
                         <div>
-                            <select class="form-select form-select-sm sort-select">
+                            <select class="form-select form-select-sm sort-select" data-bs-toggle="tooltip" title="Change how suppliers are sorted in the list">
                                 <option value="name_asc">Name (A-Z)</option>
                                 <option value="name_desc">Name (Z-A)</option>
                                 <option value="recent">Most Recent</option>
@@ -60,7 +63,7 @@
                                         <td>{{ $supplier->contact_person }}</td>
                                         <td>{{ $supplier->phone }}</td>
                                         <td>{{ $supplier->email }}</td>
-                                        <td>0</td>
+                                        <td>{{ $supplier->product_count ?? 0 }}</td>
                                         <td><span class="badge bg-{{ $supplier->status === 'active' ? 'success' : ($supplier->status === 'on_hold' ? 'warning' : 'secondary') }}">{{ $supplier->status === 'on_hold' ? 'On Hold' : ucfirst($supplier->status) }}</span></td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
@@ -97,7 +100,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-light">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="addSupplierModalLabel"><i class="fas fa-truck-loading me-2" style="color: #ffc107;"></i>Add New Supplier</h5>
+                    <h5 class="modal-title" id="addSupplierModalLabel">
+                        <i class="fas fa-truck-loading me-2" style="color: #ffc107;"></i>
+                        Add New Supplier
+                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Add a new supplier to your inventory system"></i>
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -177,7 +184,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-light">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="viewSupplierModalLabel"><i class="fas fa-info-circle me-2" style="color: #ffc107;"></i>Supplier Details</h5>
+                    <h5 class="modal-title" id="viewSupplierModalLabel">
+                        <i class="fas fa-info-circle me-2" style="color: #ffc107;"></i>
+                        Supplier Details
+                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="View complete information about this supplier"></i>
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
@@ -188,8 +199,8 @@
                                     <i class="fas fa-building fa-lg" style="color: #6c757d;"></i>
                             </div>
                                 <div>
-                                    <h4 class="mb-0">ABC Auto Parts</h4>
-                                    <p class="text-muted mb-0">Supplier of quality automotive parts since 2020</p>
+                                    <h4 class="mb-0"><!-- Supplier name will be loaded dynamically --></h4>
+                                    <p class="text-muted mb-0"><!-- Supplier code will be loaded dynamically --></p>
                             </div>
                             </div>
                             <hr>
@@ -198,24 +209,28 @@
                         <div class="col-md-6">
                             <div class="card bg-white border border-secondary-subtle shadow-sm mb-3">
                                 <div class="card-header bg-white py-2">
-                                    <h6 class="card-title mb-0 fw-bold" style="color: #f8f9fa !important;"><i class="fas fa-id-card me-2" style="color: #ffc107;"></i>Contact Information</h6>
+                                    <h6 class="card-title mb-0 fw-bold" style="color: #f8f9fa !important;">
+                                        <i class="fas fa-id-card me-2" style="color: #ffc107;"></i>
+                                        Contact Information
+                                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Contact details for this supplier"></i>
+                                    </h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-2">
                                         <div class="text-muted small">Contact Person</div>
-                                        <div class="fw-medium text-dark">John Smith (General Manager)</div>
+                                        <div class="fw-medium text-dark"><!-- Contact person will be loaded dynamically --></div>
                                     </div>
                                     <div class="mb-2">
                                         <div class="text-muted small">Phone</div>
-                                        <div class="fw-medium text-dark">+63 912 345 6789</div>
+                                        <div class="fw-medium text-dark"><!-- Phone will be loaded dynamically --></div>
                                     </div>
                                     <div class="mb-2">
                                         <div class="text-muted small">Email</div>
-                                        <div class="fw-medium text-dark">johnsmith@abcautoparts.com</div>
+                                        <div class="fw-medium text-dark"><!-- Email will be loaded dynamically --></div>
                             </div>
                                     <div>
                                         <div class="text-muted small">Address</div>
-                                        <div class="fw-medium text-dark">123 Main Street, Makati City, Metro Manila, Philippines</div>
+                                        <div class="fw-medium text-dark"><!-- Address will be loaded dynamically --></div>
                             </div>
                             </div>
                             </div>
@@ -224,20 +239,28 @@
                         <div class="col-md-6">
                             <div class="card bg-white border border-secondary-subtle shadow-sm mb-3">
                                 <div class="card-header bg-white py-2">
-                                    <h6 class="card-title mb-0 fw-bold" style="color: #f8f9fa !important;"><i class="fas fa-briefcase me-2" style="color: #ffc107;"></i>Business Information</h6>
+                                    <h6 class="card-title mb-0 fw-bold" style="color: #f8f9fa !important;">
+                                        <i class="fas fa-briefcase me-2" style="color: #ffc107;"></i>
+                                        Business Information
+                                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Business details and account status"></i>
+                                    </h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-2">
                                         <div class="text-muted small">Supplier Code</div>
-                                        <div class="fw-medium text-dark">SUP-001</div>
+                                        <div class="fw-medium text-dark"><!-- Supplier code will be loaded dynamically --></div>
                                     </div>
                                     <div class="mb-2">
                                         <div class="text-muted small">Payment Terms</div>
-                                        <div class="fw-medium text-dark">30 Days</div>
+                                        <div class="fw-medium text-dark"><!-- Payment terms will be loaded dynamically --></div>
                                     </div>
                                     <div class="mb-2">
                                         <div class="text-muted small">Status</div>
-                                        <div><span class="badge bg-success">Active</span></div>
+                                        <div><span class="badge"><!-- Status will be loaded dynamically --></span></div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <div class="text-muted small">Products Supplied</div>
+                                        <div class="fw-medium text-dark"><!-- Product count will be loaded dynamically --></div>
                                     </div>
                                     </div>
                                 </div>
@@ -246,14 +269,18 @@
                         <div class="col-md-12">
                             <div class="card bg-white border border-secondary-subtle shadow-sm">
                                 <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
-                                    <h6 class="card-title mb-0 fw-bold" style="color: #f8f9fa !important;"><i class="fas fa-clipboard-list me-2" style="color: #ffc107;"></i>Additional Information</h6>
+                                    <h6 class="card-title mb-0 fw-bold" style="color: #f8f9fa !important;">
+                                        <i class="fas fa-clipboard-list me-2" style="color: #ffc107;"></i>
+                                        Additional Information
+                                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Notes and additional details about this supplier"></i>
+                                    </h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="mb-0">
                                                 <div class="text-muted small mb-1">Notes</div>
-                                                <div class="fw-medium text-dark">Reliable supplier with consistent quality and on-time deliveries.</div>
+                                                <div class="fw-medium text-dark"><!-- Notes will be loaded dynamically --></div>
                                             </div>
                                         </div>
                                     </div>
@@ -264,7 +291,7 @@
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-accent" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editSupplierModal">
+                    <button type="button" class="btn btn-accent" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#editSupplierModal" data-bs-toggle="tooltip" title="Edit this supplier's information">
                         <i class="fas fa-edit me-1"></i> Edit Supplier
                     </button>
                 </div>
@@ -277,51 +304,56 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-light">
                 <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title" id="editSupplierModalLabel"><i class="fas fa-edit me-2" style="color: #ffc107;"></i>Edit Supplier</h5>
+                    <h5 class="modal-title" id="editSupplierModalLabel">
+                        <i class="fas fa-edit me-2" style="color: #ffc107;"></i>
+                        Edit Supplier
+                        <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Update supplier information"></i>
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-3">
                     <form id="editSupplierForm">
+                        @csrf
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="supplierName" class="form-label mb-1 text-dark">Supplier Name</label>
-                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="supplierName" required>
+                                <label for="edit_name" class="form-label mb-1 text-dark">Supplier Name</label>
+                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_name" name="name" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="supplierCode" class="form-label mb-1 text-dark">Supplier Code</label>
-                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="supplierCode" placeholder="Auto-generated if left blank">
+                                <label for="edit_supplier_code" class="form-label mb-1 text-dark">Supplier Code</label>
+                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_supplier_code" name="supplier_code" placeholder="Auto-generated if left blank">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="contactPerson" class="form-label mb-1 text-dark">Contact Person</label>
-                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="contactPerson" required>
+                                <label for="edit_contact_person" class="form-label mb-1 text-dark">Contact Person</label>
+                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_contact_person" name="contact_person" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="position" class="form-label mb-1 text-dark">Position</label>
-                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="position">
+                                <label for="edit_position" class="form-label mb-1 text-dark">Position</label>
+                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_position" name="position">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="phone" class="form-label mb-1 text-dark">Phone</label>
-                                <input type="tel" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="phone" required>
+                                <label for="edit_phone" class="form-label mb-1 text-dark">Phone</label>
+                                <input type="tel" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_phone" name="phone" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="email" class="form-label mb-1 text-dark">Email</label>
-                                <input type="email" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="email" required>
+                                <label for="edit_email" class="form-label mb-1 text-dark">Email</label>
+                                <input type="email" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_email" name="email" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <label for="address" class="form-label mb-1 text-dark">Address</label>
-                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="address" required>
+                                <label for="edit_address" class="form-label mb-1 text-dark">Address</label>
+                                <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_address" name="address" required>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="paymentTerms" class="form-label mb-1 text-dark">Payment Terms</label>
-                                <select class="form-select bg-white text-dark border border-secondary-subtle shadow-sm" id="paymentTerms">
+                                <label for="edit_payment_terms" class="form-label mb-1 text-dark">Payment Terms</label>
+                                <select class="form-select bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_payment_terms" name="payment_terms">
                                     <option value="cod">Cash on Delivery</option>
                                     <option value="15days">15 Days</option>
                                     <option value="30days">30 Days</option>
@@ -329,17 +361,17 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="status" class="form-label mb-1 text-dark">Status</label>
-                                <select class="form-select bg-white text-dark border border-secondary-subtle shadow-sm" id="status">
-                                    <option value="active" selected>Active</option>
+                                <label for="edit_status" class="form-label mb-1 text-dark">Status</label>
+                                <select class="form-select bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_status" name="status">
+                                    <option value="active">Active</option>
                                     <option value="on_hold">On Hold</option>
                                     <option value="inactive">Inactive</option>
                                 </select>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="notes" class="form-label mb-1 text-dark">Notes</label>
-                            <textarea class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="notes" rows="3"></textarea>
+                            <label for="edit_notes" class="form-label mb-1 text-dark">Notes</label>
+                            <textarea class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" id="edit_notes" name="notes" rows="3"></textarea>
                         </div>
                     </form>
                 </div>
@@ -397,56 +429,55 @@
             
             // Edit Supplier
             document.querySelectorAll('.edit-supplier').forEach(button => {
-                button.addEventListener('click', async function() {
-                    const supplierId = this.dataset.supplierId;
-                    
-                    try {
-                        const response = await fetch(`/suppliers/${supplierId}`);
-                        const supplier = await response.json();
-                        
-                        // Fill the edit form with supplier data
-                        const editForm = document.getElementById('editSupplierForm');
-                        for (const [key, value] of Object.entries(supplier)) {
-                            const input = editForm.querySelector(`[name="${key}"]`);
-                            if (input) input.value = value;
-                        }
-                        
-                        editForm.dataset.supplierId = supplierId;
-                    } catch (error) {
-                        alert('Error loading supplier data');
-                    }
+                button.addEventListener('click', function() {
+                    // Clear previous data before loading new data
+                    resetEditSupplierForm();
+                    // Then load the supplier for editing
+                    loadSupplierForEdit.call(this);
                 });
             });
             
             // Update Supplier
+            document.getElementById('updateSupplierBtn').addEventListener('click', function() {
+                document.getElementById('editSupplierForm').dispatchEvent(new Event('submit'));
+            });
+            
             document.getElementById('editSupplierForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
                 const supplierId = this.dataset.supplierId;
                 const formData = new FormData(this);
-                const data = Object.fromEntries(formData.entries());
+                formData.append('_method', 'PUT');
                 
                 try {
                     const response = await fetch(`/suppliers/${supplierId}`, {
-                        method: 'PUT',
+                        method: 'POST',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
                         },
-                        body: JSON.stringify(data)
+                        body: formData
                     });
                     
                     const result = await response.json();
                     
                     if (response.ok) {
+                        // Close the modal
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('editSupplierModal'));
+                        modal.hide();
+                        
+                        // Show success message
                         alert(result.message);
+                        
+                        // Reload the page to show updated data
                         location.reload();
                     } else {
                         const errors = Object.values(result.errors).flat().join('\n');
                         alert('Error: ' + errors);
                     }
                 } catch (error) {
-                    alert('An error occurred. Please try again.');
+                    console.error('Error updating supplier:', error);
+                    alert('An error occurred while updating the supplier. Please try again.');
                 }
             });
             
@@ -507,7 +538,7 @@
                                 <td>${supplier.contact_person}</td>
                                 <td>${supplier.phone}</td>
                                 <td>${supplier.email}</td>
-                                <td>0</td>
+                                <td>${supplier.product_count || 0}</td>
                                 <td><span class="badge bg-${supplier.status === 'active' ? 'success' : (supplier.status === 'on_hold' ? 'warning' : 'secondary')}">${supplier.status === 'on_hold' ? 'On Hold' : supplier.status.charAt(0).toUpperCase() + supplier.status.slice(1)}</span></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
@@ -536,11 +567,21 @@
             function attachEventListeners() {
                 // Reattach event listeners for view, edit, and delete buttons
                 document.querySelectorAll('.view-supplier').forEach(button => {
-                    button.addEventListener('click', loadSupplierDetails);
+                    button.addEventListener('click', function() {
+                        // Clear previous data before loading new data
+                        resetSupplierDetailsModal();
+                        // Then load the new supplier details
+                        loadSupplierDetails.call(this);
+                    });
                 });
                 
                 document.querySelectorAll('.edit-supplier').forEach(button => {
-                    button.addEventListener('click', loadSupplierForEdit);
+                    button.addEventListener('click', function() {
+                        // Clear previous data before loading new data
+                        resetEditSupplierForm();
+                        // Then load the supplier for editing
+                        loadSupplierForEdit.call(this);
+                    });
                 });
                 
                 document.querySelectorAll('.delete-supplier').forEach(button => {
@@ -550,6 +591,211 @@
             
             // Initial attachment of event listeners
             attachEventListeners();
+            
+            // Function to reset the edit supplier form
+            function resetEditSupplierForm() {
+                const form = document.getElementById('editSupplierForm');
+                form.reset();
+                
+                // Add loading indicators for key fields
+                document.getElementById('edit_name').value = 'Loading...';
+                document.getElementById('edit_supplier_code').value = 'Loading...';
+                document.getElementById('edit_contact_person').value = 'Loading...';
+                document.getElementById('edit_phone').value = 'Loading...';
+                document.getElementById('edit_email').value = 'Loading...';
+            }
+            
+            // Function to reset the supplier details modal
+            function resetSupplierDetailsModal() {
+                const modal = document.getElementById('viewSupplierModal');
+                
+                // Reset supplier name and description
+                modal.querySelector('h4').textContent = 'Loading...';
+                modal.querySelector('p.text-muted').textContent = 'Loading supplier information';
+                
+                // Reset contact information
+                const contactInfo = modal.querySelectorAll('.card-body .fw-medium.text-dark');
+                for (let i = 0; i < 4; i++) {
+                    if (contactInfo[i]) contactInfo[i].textContent = 'Loading...';
+                }
+                
+                // Reset business information
+                const businessInfo = modal.querySelectorAll('.card-body .fw-medium.text-dark, .card-body .badge');
+                if (businessInfo[4]) businessInfo[4].textContent = 'Loading...';
+                if (businessInfo[5]) businessInfo[5].textContent = 'Loading...';
+                
+                // Reset status badge
+                const statusBadge = businessInfo[6];
+                if (statusBadge) {
+                    statusBadge.className = 'badge bg-secondary';
+                    statusBadge.textContent = 'Loading...';
+                }
+                
+                // Reset product count
+                if (businessInfo[7]) businessInfo[7].textContent = 'Loading...';
+                
+                // Reset notes
+                const notesElement = modal.querySelector('.col-md-12 .card:last-child .card-body .fw-medium.text-dark');
+                if (notesElement) notesElement.textContent = 'Loading...';
+            }
+            
+            // Function to load supplier details
+            async function loadSupplierDetails() {
+                const supplierId = this.dataset.supplierId;
+                
+                try {
+                    const response = await fetch(`/suppliers/${supplierId}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const supplier = await response.json();
+                    
+                    // Log the supplier data to debug
+                    console.log('Supplier data:', supplier);
+                    
+                    // Update the supplier details modal with actual data
+                    const modal = document.getElementById('viewSupplierModal');
+                    
+                    // Update supplier name and description
+                    modal.querySelector('h4').textContent = supplier.name;
+                    modal.querySelector('p.text-muted').textContent = `Supplier code: ${supplier.supplier_code}`;
+                    
+                    // Update contact information
+                    const contactInfo = modal.querySelectorAll('.card-body .fw-medium.text-dark');
+                    contactInfo[0].textContent = supplier.contact_person + (supplier.position ? ` (${supplier.position})` : '');
+                    contactInfo[1].textContent = supplier.phone;
+                    contactInfo[2].textContent = supplier.email;
+                    contactInfo[3].textContent = supplier.address;
+                    
+                    // Update business information
+                    const businessInfo = modal.querySelectorAll('.card-body .fw-medium.text-dark, .card-body .badge');
+                    businessInfo[4].textContent = supplier.supplier_code;
+                    
+                    // Format payment terms for display
+                    let paymentTermsText = '';
+                    switch(supplier.payment_terms) {
+                        case 'cod': paymentTermsText = 'Cash on Delivery'; break;
+                        case '15days': paymentTermsText = '15 Days'; break;
+                        case '30days': paymentTermsText = '30 Days'; break;
+                        case '60days': paymentTermsText = '60 Days'; break;
+                        default: paymentTermsText = supplier.payment_terms;
+                    }
+                    businessInfo[5].textContent = paymentTermsText;
+                    
+                    // Update status badge
+                    const statusBadge = businessInfo[6];
+                    statusBadge.className = `badge bg-${supplier.status === 'active' ? 'success' : (supplier.status === 'on_hold' ? 'warning' : 'secondary')}`;
+                    statusBadge.textContent = supplier.status === 'on_hold' ? 'On Hold' : supplier.status.charAt(0).toUpperCase() + supplier.status.slice(1);
+                    
+                    // Update product count
+                    if (businessInfo[7]) {
+                        businessInfo[7].textContent = supplier.product_count || 0;
+                    }
+                    
+                    // Update notes
+                    const notesElement = modal.querySelector('.col-md-12 .card:last-child .card-body .fw-medium.text-dark');
+                    console.log('Notes element:', notesElement);
+                    console.log('Supplier notes:', supplier.notes);
+                    notesElement.textContent = supplier.notes || 'No notes available';
+                    
+                    // Set the supplier ID for the edit button
+                    const editBtn = modal.querySelector('.modal-footer .btn-accent');
+                    editBtn.dataset.supplierId = supplier.id;
+                    
+                } catch (error) {
+                    console.error('Error loading supplier details:', error);
+                    alert('Failed to load supplier details. Please try again.');
+                    
+                    // Keep the loading state in case of error
+                    const modal = document.getElementById('viewSupplierModal');
+                    modal.querySelector('h4').textContent = 'Error loading data';
+                    modal.querySelector('p.text-muted').textContent = 'Please try again';
+                }
+            }
+            
+            // Function to load supplier for editing
+            async function loadSupplierForEdit() {
+                const supplierId = this.dataset.supplierId;
+                
+                try {
+                    const response = await fetch(`/suppliers/${supplierId}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const supplier = await response.json();
+                    
+                    // Fill the edit form with supplier data
+                    document.getElementById('edit_name').value = supplier.name;
+                    document.getElementById('edit_supplier_code').value = supplier.supplier_code;
+                    document.getElementById('edit_contact_person').value = supplier.contact_person;
+                    document.getElementById('edit_position').value = supplier.position || '';
+                    document.getElementById('edit_phone').value = supplier.phone;
+                    document.getElementById('edit_email').value = supplier.email;
+                    document.getElementById('edit_address').value = supplier.address;
+                    document.getElementById('edit_payment_terms').value = supplier.payment_terms;
+                    document.getElementById('edit_status').value = supplier.status;
+                    document.getElementById('edit_notes').value = supplier.notes || '';
+                    
+                    // Store supplier ID for update
+                    document.getElementById('editSupplierForm').dataset.supplierId = supplierId;
+                } catch (error) {
+                    console.error('Error loading supplier data:', error);
+                    alert('Error loading supplier data. Please try again.');
+                    
+                    // Reset the form completely if there was an error
+                    const form = document.getElementById('editSupplierForm');
+                    form.reset();
+                }
+            }
+            
+            // Function to delete supplier
+            async function deleteSupplier() {
+                if (!confirm('Are you sure you want to delete this supplier? This action cannot be undone.')) {
+                    return;
+                }
+                
+                const supplierId = this.dataset.supplierId;
+                
+                try {
+                    const response = await fetch(`/suppliers/${supplierId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        alert(result.message);
+                        location.reload();
+                    } else {
+                        alert('Error deleting supplier');
+                    }
+                } catch (error) {
+                    console.error('Error deleting supplier:', error);
+                    alert('An error occurred. Please try again.');
+                }
+            }
+            
+            // Initialize tooltips
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            
+            // Re-initialize tooltips after dynamic content is loaded
+            const viewSupplierModal = document.getElementById('viewSupplierModal');
+            viewSupplierModal.addEventListener('shown.bs.modal', function() {
+                const modalTooltips = viewSupplierModal.querySelectorAll('[data-bs-toggle="tooltip"]');
+                [...modalTooltips].forEach(tooltipTrigger => new bootstrap.Tooltip(tooltipTrigger));
+            });
+            
+            const editSupplierModal = document.getElementById('editSupplierModal');
+            editSupplierModal.addEventListener('shown.bs.modal', function() {
+                const modalTooltips = editSupplierModal.querySelectorAll('[data-bs-toggle="tooltip"]');
+                [...modalTooltips].forEach(tooltipTrigger => new bootstrap.Tooltip(tooltipTrigger));
+            });
         });
     </script>
 </x-dashboard-layout> 

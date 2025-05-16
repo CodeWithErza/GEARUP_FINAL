@@ -21,6 +21,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-arrow-down me-2"></i>
                             Stock Out Details
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Record products leaving inventory"></i>
                         </h5>
                     </div>
                     <div class="card-body">
@@ -43,7 +44,7 @@
                                 <label class="form-label">Search Product</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="productSearch" placeholder="Search product...">
-                                    <button class="btn btn-accent" type="button" id="openProductModal">
+                                    <button class="btn btn-accent" type="button" id="openProductModal" data-bs-toggle="tooltip" title="Browse all available products">
                                         <i class="fas fa-search me-1"></i>
                                         Browse
                                     </button>
@@ -99,7 +100,7 @@
 
                             <!-- Action Buttons -->
                             <div class="d-flex justify-content-end gap-2">
-                                <button type="submit" class="btn btn-accent" id="processStockOut">
+                                <button type="submit" class="btn btn-accent" id="processStockOut" data-bs-toggle="tooltip" title="Record this stock removal transaction">
                                     <i class="fas fa-check-circle me-1"></i>
                                     Process Stock Out
                                 </button>
@@ -117,6 +118,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-history me-2"></i>
                             Recent Transactions
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Recently processed stock removals"></i>
                         </h5>
                     </div>
                     <div class="card-body p-0 bg-white" style="overflow-y: auto; height: 250px;">
@@ -146,6 +148,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-info-circle me-2"></i>
                             Transaction Guidelines
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Important rules for stock removal"></i>
                         </h5>
                     </div>
                     <div class="card-body bg-white">
@@ -167,7 +170,10 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productSelectionModalLabel">Select Products</h5>
+                    <h5 class="modal-title" id="productSelectionModalLabel">
+                        Select Products
+                        <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Choose products to remove from inventory"></i>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -460,6 +466,20 @@
                 stockOutItems.appendChild(row);
                 itemIndex++;
             }
+
+            // Initialize all tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Reinitialize tooltips when modal is shown
+            document.getElementById('productSelectionModal').addEventListener('shown.bs.modal', function () {
+                var modalTooltipTriggerList = [].slice.call(document.querySelectorAll('#productSelectionModal [data-bs-toggle="tooltip"]'))
+                var modalTooltipList = modalTooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                });
+            });
         });
     </script>
     @endpush

@@ -10,7 +10,15 @@ class SupplierController extends Controller
 {
     public function index()
     {
-        $suppliers = Supplier::orderBy('name')->paginate(10);
+        $suppliers = Supplier::withCount('stockins')
+            ->orderBy('name')
+            ->paginate(10);
+            
+        // Add product count for each supplier
+        $suppliers->each(function ($supplier) {
+            $supplier->product_count = $supplier->getProductCountAttribute();
+        });
+        
         return view('suppliers.index', compact('suppliers'));
     }
 
@@ -43,6 +51,7 @@ class SupplierController extends Controller
 
     public function show(Supplier $supplier)
     {
+        $supplier->product_count = $supplier->getProductCountAttribute();
         return response()->json($supplier);
     }
 
@@ -91,8 +100,14 @@ class SupplierController extends Controller
             ->orWhere('contact_person', 'like', "%{$query}%")
             ->orWhere('email', 'like', "%{$query}%")
             ->orWhere('supplier_code', 'like', "%{$query}%")
+            ->withCount('stockins')
             ->orderBy('name')
             ->get();
+            
+        // Add product count for each supplier
+        $suppliers->each(function ($supplier) {
+            $supplier->product_count = $supplier->getProductCountAttribute();
+        });
             
         return response()->json($suppliers);
     }

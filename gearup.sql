@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Apr 13, 2025 at 06:10 PM
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 12, 2025 at 12:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,8 +18,20 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `draft1`
+-- Database: `gearup`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `audit_logs`
+--
+
+CREATE TABLE `audit_logs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -32,6 +44,20 @@ CREATE TABLE `cache` (
   `value` mediumtext NOT NULL,
   `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cache`
+--
+
+INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+('admin1@gmail.com|127.0.0.1', 'i:1;', 1746827285),
+('admin1@gmail.com|127.0.0.1:timer', 'i:1746827285;', 1746827285),
+('admin123@gmail.com|127.0.0.1', 'i:1;', 1746159595),
+('admin123@gmail.com|127.0.0.1:timer', 'i:1746159595;', 1746159595),
+('j.palen.517524@umindanao.edu.ph|127.0.0.1', 'i:2;', 1746428019),
+('j.palen.517524@umindanao.edu.ph|127.0.0.1:timer', 'i:1746428019;', 1746428019),
+('j.palen.527524@umindanao.edu.ph|127.0.0.1', 'i:1;', 1746159889),
+('j.palen.527524@umindanao.edu.ph|127.0.0.1:timer', 'i:1746159889;', 1746159889);
 
 -- --------------------------------------------------------
 
@@ -65,24 +91,10 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `created_at`, `updated_at`) VALUES
-(1, 'Interior', 'interior', 'Interior parts and accessories for vehicles', '2025-04-01 13:57:49', '2025-04-01 13:57:49'),
-(2, 'Exterior', 'exterior', 'Exterior parts and accessories for vehicles', '2025-04-01 13:57:49', '2025-04-01 13:57:49'),
-(3, 'Engine', 'engine', 'Engine parts and components', '2025-04-01 13:57:49', '2025-04-01 13:57:49'),
-(4, 'Under Chassis', 'under-chassis', 'Under chassis parts and components', '2025-04-01 13:57:49', '2025-04-01 13:57:49');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `chirps`
---
-
-CREATE TABLE `chirps` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `message` varchar(255) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(1, 'Interior', 'interior', 'Interior parts and accessories for vehicles', '2025-05-01 11:47:47', '2025-05-01 11:47:47'),
+(2, 'Exterior', 'exterior', 'Exterior parts and accessories for vehicles', '2025-05-01 11:47:47', '2025-05-01 11:47:47'),
+(3, 'Engine', 'engine', 'Engine parts and components', '2025-05-01 11:47:47', '2025-05-01 11:47:47'),
+(4, 'Under Chassis', 'under-chassis', 'Under chassis parts and components', '2025-05-01 11:47:47', '2025-05-01 11:47:47');
 
 -- --------------------------------------------------------
 
@@ -105,11 +117,9 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`id`, `name`, `phone`, `email`, `address`, `created_at`, `updated_at`) VALUES
-(1, 'dsajhgdsaj', '290830219', 'HASKjsskjah@gmail.com', NULL, '2025-04-01 13:59:16', '2025-04-01 13:59:16'),
-(2, 'era dumangcas', '12398127', 'dhsja@gmail.com', NULL, '2025-04-01 14:12:15', '2025-04-01 14:12:15'),
-(3, 'adrian', '172983', 'dsadkhg@gmail.com', NULL, '2025-04-01 14:25:53', '2025-04-01 14:25:53'),
-(4, 'John Andrew Palen', '09273384727', 'dsadasaakhg@gmail.com', NULL, '2025-04-10 10:43:12', '2025-04-10 10:43:12'),
-(5, 'princess fiona lacabo', '09312560893', 'fionalovesshrek@gmail.com', NULL, '2025-04-13 08:00:03', '2025-04-13 08:00:03');
+(1, 'Maria Santos', '+63 912 345 6789', 'maria@example.com', NULL, '2025-05-01 11:47:47', '2025-05-01 11:47:47'),
+(2, 'Juan dela Cruz', '+63 923 456 7890', 'juan@example.com', NULL, '2025-05-01 11:47:47', '2025-05-01 11:47:47'),
+(3, 'Eraj', '+63 923 295 235-9', 'eraj@snlna', NULL, '2025-05-01 11:47:47', '2025-05-01 11:47:47');
 
 -- --------------------------------------------------------
 
@@ -187,12 +197,19 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2024_03_21_000002_create_products_table', 1),
 (7, '2024_03_21_000003_create_customers_table', 1),
 (8, '2024_03_21_000004_create_orders_table', 1),
-(9, '2024_03_21_000005_create_order_items_table', 1),
-(10, '2025_02_23_165040_create_chirps_table', 1),
-(11, '2024_03_21_000004_create_stockins_table', 2),
-(12, '2024_03_21_000005_create_stockouts_table', 3),
-(13, '2025_04_13_000006_create_stock_adjustments', 4),
-(14, '2025_04_14_00007_create_stock_adjustments_items', 4);
+(9, '2024_03_21_000004_create_stockins_table', 1),
+(10, '2024_03_21_000005_create_order_items_table', 1),
+(11, '2024_04_17_000000_add_role_and_is_active_to_users_table', 1),
+(12, '2024_06_03_000001_add_audit_fields_to_users_table', 1),
+(13, '2025_04_13_000006_create_stock_adjustments', 1),
+(14, '2025_04_14_00007_create_stock_adjustments_items', 1),
+(15, '2025_04_16_063811_add_image_to_products_table', 1),
+(16, '2025_04_17_014835_add_user_id_to_orders_table', 1),
+(17, '2025_04_17_015158_create_audit_logs_table', 1),
+(18, '2025_04_19_000001_add_date_to_stock_adjustments', 1),
+(19, '2025_04_30_130037_add_audit_fields_to_users_table', 1),
+(20, '2025_05_01_000001_add_birthdate_and_last_login_to_users_table', 1),
+(21, '2025_05_02_000001_modify_birthdate_format_in_users_table', 1);
 
 -- --------------------------------------------------------
 
@@ -224,11 +241,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `order_number`, `customer_id`, `subtotal`, `tax`, `discount_amount`, `discount_percentage`, `total`, `payment_method`, `amount_received`, `change`, `payment_reference`, `notes`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'ORD-2025-001', 1, 1500.00, 180.00, 0.00, 0.00, 1680.00, 'cash', 5000.00, 3320.00, NULL, NULL, 'completed', '2025-04-01 13:59:16', '2025-04-01 13:59:16'),
-(2, 'ORD-2025-002', 2, 350.00, 42.00, 0.00, 0.00, 392.00, 'cash', 600.00, 208.00, NULL, NULL, 'completed', '2025-04-01 14:12:15', '2025-04-01 14:12:15'),
-(3, 'ORD-2025-003', 3, 1500.00, 180.00, 0.00, 0.00, 1680.00, 'cash', 2000.00, 320.00, NULL, NULL, 'completed', '2025-04-01 14:25:53', '2025-04-01 14:25:53'),
-(4, 'ORD-2025-004', 4, 1500.00, 180.00, 300.00, 20.00, 1380.00, 'cash', 2000.00, 620.00, NULL, NULL, 'completed', '2025-04-10 10:43:12', '2025-04-10 10:43:12'),
-(5, 'ORD-2025-005', 5, 750.00, 90.00, 150.00, 20.00, 690.00, 'cash', 700.00, 10.00, NULL, NULL, 'completed', '2025-04-13 08:00:03', '2025-04-13 08:00:03');
+(1, 'ORD-2025-001', 1, 5000.00, 600.00, 0.00, 0.00, 5600.00, 'cash', 6000.00, 400.00, NULL, NULL, 'completed', '2025-05-01 20:20:02', '2025-05-01 20:20:02'),
+(2, 'ORD-2025-002', 1, 1000.00, 120.00, 0.00, 0.00, 1120.00, 'cash', 1200.00, 80.00, NULL, NULL, 'completed', '2025-05-09 15:06:42', '2025-05-09 15:06:42');
 
 -- --------------------------------------------------------
 
@@ -252,11 +266,8 @@ CREATE TABLE `order_items` (
 --
 
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `price`, `subtotal`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, 1500.00, 1500.00, '2025-04-01 13:59:16', '2025-04-01 13:59:16'),
-(2, 2, 2, 1, 350.00, 350.00, '2025-04-01 14:12:15', '2025-04-01 14:12:15'),
-(3, 3, 1, 1, 1500.00, 1500.00, '2025-04-01 14:25:53', '2025-04-01 14:25:53'),
-(4, 4, 4, 1, 1500.00, 1500.00, '2025-04-10 10:43:12', '2025-04-10 10:43:12'),
-(5, 5, 6, 1, 750.00, 750.00, '2025-04-13 08:00:03', '2025-04-13 08:00:03');
+(1, 1, 3, 1, 5000.00, 5000.00, '2025-05-01 20:20:02', '2025-05-01 20:20:02'),
+(2, 2, 5, 1, 1000.00, 1000.00, '2025-05-09 15:06:42', '2025-05-09 15:06:42');
 
 -- --------------------------------------------------------
 
@@ -282,6 +293,7 @@ CREATE TABLE `products` (
   `sku` varchar(255) NOT NULL,
   `category_id` bigint(20) UNSIGNED NOT NULL,
   `description` text DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL,
   `price` decimal(10,2) NOT NULL,
   `stock` int(11) NOT NULL,
   `reorder_level` int(11) NOT NULL DEFAULT 10,
@@ -299,13 +311,16 @@ CREATE TABLE `products` (
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `sku`, `category_id`, `description`, `price`, `stock`, `reorder_level`, `unit`, `brand`, `model`, `manufacturer`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Premium Engine Oil', 'PRD-000001', 3, 'dsadsa', 1500.00, 8, 10, 'piece', 'dsaknj', 'dsada', 'dsa', 1, '2025-04-01 13:58:54', '2025-04-03 08:23:12', '2025-04-03 08:23:12'),
-(2, 'ambot', 'PRD-000002', 1, 'dsad', 350.00, 39, 10, 'piece', 'dsad', 'sda', 'dsa', 1, '2025-04-01 14:11:21', '2025-04-13 07:12:12', NULL),
-(3, 'dsadsadas', 'PRD-000003', 4, 'dsadas', 1231.00, 15, 10, 'piece', 'dsad', 'dsa', 'das', 1, '2025-04-01 14:24:37', '2025-04-01 14:24:37', NULL),
-(4, 'new prod', 'PRD-000004', 4, 'dsa', 1500.00, 3, 10, 'piece', 'dsa', 'dsa', 'dsa', 1, '2025-04-10 10:42:05', '2025-04-10 10:43:12', NULL),
-(5, 'Jiafei', 'PRD-000005', 1, 'good item and long lasting prodeeks.', 750.00, 300, 10, 'piece', 'jaifei prodeeks', 'meifei', 'China', 1, '2025-04-13 07:57:41', '2025-04-13 07:57:52', '2025-04-13 07:57:52'),
-(6, 'Jiafei', 'PRD-000006', 1, 'good item and long lasting prodeeks.', 750.00, 300, 10, 'piece', 'jaifei prodeeks', 'meifei', 'China', 1, '2025-04-13 07:57:42', '2025-04-13 08:00:35', NULL);
+INSERT INTO `products` (`id`, `name`, `sku`, `category_id`, `description`, `image`, `price`, `stock`, `reorder_level`, `unit`, `brand`, `model`, `manufacturer`, `is_active`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'Baby Car Seat', '121038412', 1, NULL, 'images/products/1745730748.jpg', 1000.00, 19, 5, 'piece', 'Baby Products', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(2, 'Steering Wheel', '12213', 1, 'adsclqb', 'images/products/1745730828.jpg', 1500.00, 18, 5, 'piece', 'Test', 'Test', 'test', 1, '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(3, 'White Car Seat', '3829401', 1, 'Test', 'images/products/1745730896.jpg', 5000.00, 11, 7, 'piece', 'Test', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-01 20:21:22', NULL),
+(4, 'Black Car Bumper', '12345678', 2, 'Test', 'images/products/1745730975.jpg', 500.00, 10, 5, 'piece', 'Test', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-01 20:20:56', NULL),
+(5, 'Black Car Wiper', '1234567', 2, 'Test', 'images/products/1745745818.jpg', 1000.00, 9, 5, 'piece', 'Wiper', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-09 15:06:42', NULL),
+(6, 'Car Alternator', '121234', 3, 'Test', 'images/products/1745745874.jpg', 2500.00, 10, 4, 'piece', 'Engine', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(7, 'Fuel Injection System', '3425678986342', 3, 'Test', 'images/products/1745745922.jpg', 1000.00, 12, 4, 'piece', 'Test', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(8, 'Auto Steering Rack', '12408124', 4, 'Test', 'images/products/1745745971.jpg', 1500.00, 9, 3, 'piece', 'test', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-04 23:01:09', NULL),
+(9, 'Automotive disc', '12910412', 4, 'Test', 'images/products/1745746018.jpg', 1300.00, 14, 5, 'piece', 'Test', 'Test', 'Test', 1, '2025-05-01 11:47:47', '2025-05-08 01:29:55', NULL);
 
 -- --------------------------------------------------------
 
@@ -327,8 +342,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('8chlaIhKU3aCegbAMRv6zemCPa70jljU1BQ4Psn5', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiT2cxNUNwVnNJekNKU1dWMWV2R1dOYjVhbzBkZnF0OFd4U29VNjZTOSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9pbnZlbnRvcnkiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1744558436),
-('oZwCsJQIlXHV7Pm5kyWmNTcPMxXcQkGIBQw9R3vL', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoid2h4aXQ4UXZWZWFIU0l2bVE5cENpdWlNcXhxV2dmcUF4enVjTFl3UiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9pbnZlbnRvcnkvc3RvY2stb3V0Ijt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjt9', 1744560040);
+('hEzPKq2sjUhFGNN7uq9aEJpqhe7PhN7NQ8hOMJE7', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoieHpSZHpZYTBWNVZrTnNjVWhGendsc2VlUGpDNzhHaE40WlNuTTlUQSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6ODU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9yZXBvcnRzL2V4cG9ydC9leGNlbD9kYXRlX3JhbmdlPXRoaXNfbW9udGgmcHJvZHVjdF9jYXRlZ29yeT1hbGwiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1746834213);
 
 -- --------------------------------------------------------
 
@@ -344,6 +358,7 @@ CREATE TABLE `stockins` (
   `total_amount` decimal(10,2) NOT NULL,
   `status` enum('draft','completed','cancelled') NOT NULL DEFAULT 'draft',
   `notes` text DEFAULT NULL,
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -353,9 +368,9 @@ CREATE TABLE `stockins` (
 -- Dumping data for table `stockins`
 --
 
-INSERT INTO `stockins` (`id`, `supplier_id`, `invoice_number`, `date`, `total_amount`, `status`, `notes`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, NULL, '2025-04-10', 599.00, 'completed', NULL, '2025-04-10 09:52:22', '2025-04-10 09:52:22', NULL),
-(2, 3, NULL, '2025-04-13', 500.00, 'completed', NULL, '2025-04-13 08:00:35', '2025-04-13 08:00:35', NULL);
+INSERT INTO `stockins` (`id`, `supplier_id`, `invoice_number`, `date`, `total_amount`, `status`, `notes`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 4, NULL, '2025-05-02', 500.00, 'completed', NULL, 1, '2025-05-01 20:20:56', '2025-05-01 20:20:56', NULL),
+(2, 2, NULL, '2025-05-02', 2000.00, 'completed', NULL, 1, '2025-05-01 20:21:22', '2025-05-01 20:21:22', NULL);
 
 -- --------------------------------------------------------
 
@@ -379,45 +394,8 @@ CREATE TABLE `stockin_items` (
 --
 
 INSERT INTO `stockin_items` (`id`, `stockin_id`, `product_id`, `quantity`, `unit_price`, `total_price`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 1, 599.00, 599.00, '2025-04-10 09:52:22', '2025-04-10 09:52:22'),
-(2, 2, 6, 1, 500.00, 500.00, '2025-04-13 08:00:35', '2025-04-13 08:00:35');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `stockouts`
---
-
-CREATE TABLE `stockouts` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `reference_number` varchar(255) NOT NULL,
-  `date` date NOT NULL,
-  `type` enum('sale','return','damage','transfer','adjustment') NOT NULL DEFAULT 'sale',
-  `total_amount` decimal(10,2) NOT NULL,
-  `status` enum('draft','completed','cancelled') NOT NULL DEFAULT 'draft',
-  `notes` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `stockout_items`
---
-
-CREATE TABLE `stockout_items` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `stockout_id` bigint(20) UNSIGNED NOT NULL,
-  `product_id` bigint(20) UNSIGNED NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `unit_price` decimal(10,2) NOT NULL,
-  `total_price` decimal(10,2) NOT NULL,
-  `reason` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+(1, 1, 4, 1, 500.00, 500.00, '2025-05-01 20:20:56', '2025-05-01 20:20:56'),
+(2, 2, 3, 4, 500.00, 2000.00, '2025-05-01 20:21:22', '2025-05-01 20:21:22');
 
 -- --------------------------------------------------------
 
@@ -428,6 +406,7 @@ CREATE TABLE `stockout_items` (
 CREATE TABLE `stock_adjustments` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `reference_number` varchar(255) NOT NULL,
+  `date` date DEFAULT NULL,
   `type` enum('stock_out','adjustment') NOT NULL,
   `notes` text DEFAULT NULL,
   `processed_by` bigint(20) UNSIGNED NOT NULL,
@@ -439,8 +418,9 @@ CREATE TABLE `stock_adjustments` (
 -- Dumping data for table `stock_adjustments`
 --
 
-INSERT INTO `stock_adjustments` (`id`, `reference_number`, `type`, `notes`, `processed_by`, `created_at`, `updated_at`) VALUES
-(1, 'ADJ-20250413-001', 'adjustment', NULL, 2, '2025-04-13 07:12:12', '2025-04-13 07:12:12');
+INSERT INTO `stock_adjustments` (`id`, `reference_number`, `date`, `type`, `notes`, `processed_by`, `created_at`, `updated_at`) VALUES
+(1, 'SO-20250505-001', '2025-05-05', 'stock_out', NULL, 6, '2025-05-04 23:01:09', '2025-05-04 23:01:09'),
+(2, 'SO-20250508-001', '2025-05-08', 'stock_out', NULL, 1, '2025-05-08 01:29:55', '2025-05-08 01:29:55');
 
 -- --------------------------------------------------------
 
@@ -465,7 +445,8 @@ CREATE TABLE `stock_adjustment_items` (
 --
 
 INSERT INTO `stock_adjustment_items` (`id`, `stock_adjustment_id`, `product_id`, `current_stock`, `new_count`, `difference`, `reason`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 40, 39, -1, 'count', '2025-04-13 07:12:12', '2025-04-13 07:12:12');
+(1, 1, 8, 10, 1, -1, 'damaged', '2025-05-04 23:01:09', '2025-05-04 23:01:09'),
+(2, 2, 9, 15, 1, -1, 'damaged', '2025-05-08 01:29:55', '2025-05-08 01:29:55');
 
 -- --------------------------------------------------------
 
@@ -495,9 +476,10 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`id`, `supplier_code`, `name`, `contact_person`, `position`, `phone`, `email`, `address`, `payment_terms`, `status`, `notes`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'SUP-001', 'dsaljhd', 'dsad', 'dsa', '12312', 'dsajkh@gmail.com', 'dsa', 'cod', 'active', 'dsada', '2025-04-01 14:11:38', '2025-04-01 14:11:38', NULL),
-(2, 'SUP-002', 'dsadsa', 'dsada', 'dadas', '2131289', 'dsa@gmail.com', 'dsad', 'cod', 'active', 'dsadas', '2025-04-01 14:25:02', '2025-04-01 14:25:02', NULL),
-(3, 'SUP-003', 'angkol', 'si ano', 'admin', '918273', 'dshaj@hakuna', 'dhask', 'cod', 'active', 'dsad', '2025-04-10 10:41:23', '2025-04-10 10:41:23', NULL);
+(1, 'MAP-001', 'Metro Auto Parts Inc.', 'Carlos Rodriguez', 'Sales Manager', '+63 912 345 6789', 'carlos@metroautoparts.com', '123 Main Avenue, Makati City, Metro Manila, Philippines', '30days', 'active', 'Reliable supplier for engine components and brake systems. Offers volume discounts on orders above ₱50,000.', '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(2, 'GT-231', 'GearTech Solutions', 'Maria Santos', 'Account Executive', '+ 63 917 987 6543', 'maria@geartechsolutions.ph', '456 Technology Drive, BGC, Taguig City, Philippines', '15days', 'active', 'Premium supplier for electronic components and sensors. Fast delivery and excellent quality control.', '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(3, 'PPM-123', 'Pinoy Parts Manufacturing', 'Juan dela Cruz', 'Owner', '+63 908 765 4321', 'juan@pinoymade.ph', '567 Industrial Zone, Calamba City, Laguna, Philippines', '30days', 'on_hold', 'Local manufacturer of aftermarket parts. Currently experiencing production delays. Expected to resume normal operations next month.', '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL),
+(4, 'JIAP-88', 'Japanese Import Auto Parts', 'Hiroshi Yamada', 'International Sales Director', '+63 922 567 8901', 'hiroshi@japanesepartsimport.com', '321 Asia Avenue, Ortigas Center, Pasig City, Philippines', 'cod', 'active', 'Specializes in genuine and OEM parts for Japanese car brands. Direct import from Japan with 1-2 weeks lead time.', '2025-05-01 11:47:47', '2025-05-01 11:47:47', NULL);
 
 -- --------------------------------------------------------
 
@@ -509,6 +491,12 @@ CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL DEFAULT 'staff',
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `birthdate` varchar(255) DEFAULT NULL,
+  `last_login_at` timestamp NULL DEFAULT NULL,
+  `created_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `updated_by` bigint(20) UNSIGNED DEFAULT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
@@ -520,13 +508,19 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Test User', 'test@example.com', '2025-04-01 13:57:49', '$2y$12$CM6jus5M5MYY6UpVJP6meelVxmyi9RVSAJ6NM0eAmEUTVRjxNVgGK', 'ONEa6fUX0p', '2025-04-01 13:57:49', '2025-04-01 13:57:49'),
-(2, 'Admin', 'admin123@gmail.com', '2025-04-01 13:57:49', '$2y$12$fdlF7F3NZEYXFck8i3HJLOt.M7lrW4YNN8i4BfmGWaMsCjO.0NsJe', NULL, '2025-04-01 13:57:49', '2025-04-01 13:57:49');
+INSERT INTO `users` (`id`, `name`, `email`, `role`, `is_active`, `birthdate`, `last_login_at`, `created_by`, `updated_by`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Administrator', 'admin@gmail.com', 'admin', 1, NULL, '2025-05-09 13:47:11', NULL, NULL, '2025-05-01 11:47:46', '$2y$12$SlbnDiiY0DAFeiwySmIKKuESd8B1cepquXJUTyU2JbJloL4Urrdcu', NULL, '2025-05-01 11:47:47', '2025-05-09 13:47:11'),
+(6, 'staff', 'staff@gmail.com', 'staff', 1, NULL, '2025-05-04 23:05:27', 1, 1, NULL, '$2y$12$rCG09Fjl7FJMOH0VZJ5x7uQLCscVMdAkdxP96t0fMJisEfxmwJcFK', NULL, '2025-05-04 22:53:46', '2025-05-04 23:05:27');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `cache`
@@ -546,13 +540,6 @@ ALTER TABLE `cache_locks`
 ALTER TABLE `categories`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `categories_slug_unique` (`slug`);
-
---
--- Indexes for table `chirps`
---
-ALTER TABLE `chirps`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `chirps_user_id_foreign` (`user_id`);
 
 --
 -- Indexes for table `customers`
@@ -629,7 +616,8 @@ ALTER TABLE `sessions`
 --
 ALTER TABLE `stockins`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `stockins_supplier_id_foreign` (`supplier_id`);
+  ADD KEY `stockins_supplier_id_foreign` (`supplier_id`),
+  ADD KEY `stockins_created_by_foreign` (`created_by`);
 
 --
 -- Indexes for table `stockin_items`
@@ -638,21 +626,6 @@ ALTER TABLE `stockin_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `stockin_items_stockin_id_foreign` (`stockin_id`),
   ADD KEY `stockin_items_product_id_foreign` (`product_id`);
-
---
--- Indexes for table `stockouts`
---
-ALTER TABLE `stockouts`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `stockouts_reference_number_unique` (`reference_number`);
-
---
--- Indexes for table `stockout_items`
---
-ALTER TABLE `stockout_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `stockout_items_stockout_id_foreign` (`stockout_id`),
-  ADD KEY `stockout_items_product_id_foreign` (`product_id`);
 
 --
 -- Indexes for table `stock_adjustments`
@@ -682,11 +655,19 @@ ALTER TABLE `suppliers`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD KEY `users_created_by_foreign` (`created_by`),
+  ADD KEY `users_updated_by_foreign` (`updated_by`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `audit_logs`
+--
+ALTER TABLE `audit_logs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -695,16 +676,10 @@ ALTER TABLE `categories`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `chirps`
---
-ALTER TABLE `chirps`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -722,25 +697,25 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `stockins`
@@ -755,50 +730,32 @@ ALTER TABLE `stockin_items`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `stockouts`
---
-ALTER TABLE `stockouts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `stockout_items`
---
-ALTER TABLE `stockout_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `stock_adjustments`
 --
 ALTER TABLE `stock_adjustments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `stock_adjustment_items`
 --
 ALTER TABLE `stock_adjustment_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `chirps`
---
-ALTER TABLE `chirps`
-  ADD CONSTRAINT `chirps_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `orders`
@@ -823,6 +780,7 @@ ALTER TABLE `products`
 -- Constraints for table `stockins`
 --
 ALTER TABLE `stockins`
+  ADD CONSTRAINT `stockins_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `stockins_supplier_id_foreign` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE;
 
 --
@@ -831,13 +789,6 @@ ALTER TABLE `stockins`
 ALTER TABLE `stockin_items`
   ADD CONSTRAINT `stockin_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `stockin_items_stockin_id_foreign` FOREIGN KEY (`stockin_id`) REFERENCES `stockins` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `stockout_items`
---
-ALTER TABLE `stockout_items`
-  ADD CONSTRAINT `stockout_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `stockout_items_stockout_id_foreign` FOREIGN KEY (`stockout_id`) REFERENCES `stockouts` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `stock_adjustments`
@@ -851,6 +802,13 @@ ALTER TABLE `stock_adjustments`
 ALTER TABLE `stock_adjustment_items`
   ADD CONSTRAINT `stock_adjustment_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`),
   ADD CONSTRAINT `stock_adjustment_items_stock_adjustment_id_foreign` FOREIGN KEY (`stock_adjustment_id`) REFERENCES `stock_adjustments` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `users_updated_by_foreign` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

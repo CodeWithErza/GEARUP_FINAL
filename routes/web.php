@@ -1,5 +1,4 @@
 <?php
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,9 +20,10 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // User profile API route
+    Route::get('/api/user/profile', function () {
+        return auth()->user();
+    });
     
     // User Routes
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -70,6 +71,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('api')->group(function() {
         Route::get('/products', [ProductController::class, 'apiIndex']);
         Route::get('/products/search', [ProductController::class, 'apiSearch']);
+        Route::get('/customers', [CustomerController::class, 'index']);
+        Route::get('/customers/search', [CustomerController::class, 'search']);
     });
 
     // Order routes

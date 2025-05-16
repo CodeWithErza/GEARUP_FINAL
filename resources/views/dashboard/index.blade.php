@@ -31,14 +31,14 @@
         <div class="row g-4 mb-4">
             <!-- Sales Today -->
             <div class="col-sm-6 col-xl-3">
-                <a href="{{ route('reports.sales') }}?date_range=today" class="text-decoration-none">
-                    <div class="stats-card">
-                        <div class="stats-icon">
+                <a href="{{ route('reports.sales') }}?date_range=today" class="text-decoration-none" data-bs-toggle="tooltip" title="View detailed sales report for today">
+                    <div class="stats-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C; border-left: 4px solid #FFE45C;">
+                        <div class="stats-icon" style="background-color: rgba(255, 228, 92, 0.2);">
                             <i class="fa-solid fa-money-bill-wave fa-lg"></i>
                         </div>
-                        <div class="stats-title">Sales Today</div>
+                        <div class="stats-title" style="font-size: 1.2rem; color: #FFE45C; font-weight: 600;">Sales Today</div>
                         <div class="stats-value" id="today-sales">₱0.00</div>
-                        <div class="stats-change positive">
+                        <div class="stats-change positive text-secondary small" style="margin-bottom: 0;">
                             <i class="fas fa-chart-line me-1"></i>
                             Daily Revenue
                         </div>
@@ -48,14 +48,14 @@
             
             <!-- Orders Today -->
             <div class="col-sm-6 col-xl-3">
-                <a href="{{ route('orders.history') }}?date_range=today" class="text-decoration-none">
-                    <div class="stats-card">
-                        <div class="stats-icon">
+                <a href="{{ route('orders.history') }}?date_range=today" class="text-decoration-none" data-bs-toggle="tooltip" title="View orders processed today">
+                    <div class="stats-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C; border-left: 4px solid #FFE45C;">
+                        <div class="stats-icon" style="background-color: rgba(255, 228, 92, 0.2);">
                             <i class="fa-solid fa-cart-shopping fa-lg"></i>
                         </div>
-                        <div class="stats-title">Orders Today</div>
+                        <div class="stats-title" style="font-size: 1.2rem; color: #FFE45C; font-weight: 600;">Orders Today</div>
                         <div class="stats-value" id="today-orders">0</div>
-                        <div class="stats-change status-indicator positive">
+                        <div class="stats-change status-indicator positive text-secondary small" style="margin-bottom: 0;">
                             <i class="fas fa-clipboard-list me-1"></i>
                             Orders Processed
                         </div>
@@ -65,14 +65,14 @@
             
             <!-- Customers -->
             <div class="col-sm-6 col-xl-3">
-                <a href="{{ route('orders.index') }}#viewCustomers" class="text-decoration-none">
-                    <div class="stats-card">
-                        <div class="stats-icon">
+                <a href="{{ route('orders.index') }}#viewCustomers" class="text-decoration-none" data-bs-toggle="tooltip" title="View and manage customer information">
+                    <div class="stats-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C; border-left: 4px solid #FFE45C;">
+                        <div class="stats-icon" style="background-color: rgba(255, 228, 92, 0.2);">
                             <i class="fa-solid fa-users fa-lg"></i>
                         </div>
-                        <div class="stats-title">Total Customers</div>
+                        <div class="stats-title" style="font-size: 1.2rem; color: #FFE45C; font-weight: 600;">Total Customers</div>
                         <div class="stats-value">{{ $totalCustomers ?? 0 }}</div>
-                        <div class="stats-change status-indicator neutral">
+                        <div class="stats-change status-indicator neutral text-secondary small" style="margin-bottom: 0;">
                             <i class="fas fa-user-plus me-1"></i>
                             Customer Base
                         </div>
@@ -82,14 +82,14 @@
             
             <!-- Products -->
             <div class="col-sm-6 col-xl-3">
-                <a href="{{ route('products.index') }}" class="text-decoration-none">
-                    <div class="stats-card">
-                        <div class="stats-icon">
+                <a href="{{ route('products.index') }}" class="text-decoration-none" data-bs-toggle="tooltip" title="Manage your product inventory">
+                    <div class="stats-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C; border-left: 4px solid #FFE45C;">
+                        <div class="stats-icon" style="background-color: rgba(255, 228, 92, 0.2);">
                             <i class="fa-solid fa-boxes-stacked fa-lg"></i>
                         </div>
-                        <div class="stats-title">Total Products</div>
+                        <div class="stats-title" style="font-size: 1.2rem; color: #FFE45C; font-weight: 600;">Total Products</div>
                         <div class="stats-value">{{ $totalProducts ?? 0 }}</div>
-                        <div class="stats-change status-indicator {{ count($lowStockProducts ?? []) > 0 ? 'warning' : 'positive' }}">
+                        <div class="stats-change status-indicator {{ count($lowStockProducts ?? []) > 0 ? 'warning' : 'positive' }} text-secondary small" style="margin-bottom: 0;">
                             <i class="fas fa-box-open me-1"></i>
                             {{ count($lowStockProducts ?? []) }} Low Stock Items
                         </div>
@@ -102,25 +102,25 @@
         <div class="quick-actions mb-4">
             <div class="row g-3">
                 <div class="col-sm-6 col-md-3">
-                    <a href="{{ route('orders.index') }}" class="quick-action-card">
+                    <a href="{{ route('orders.index') }}" class="quick-action-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C;" data-bs-toggle="tooltip" title="Create a new sales order">
                         <i class="fa-solid fa-plus"></i>
                         <span>New Order</span>
                     </a>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                    <a href="{{ route('products.index') }}" class="quick-action-card">
+                    <a href="{{ route('products.index') }}" class="quick-action-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C;" data-bs-toggle="tooltip" title="Add a new product to inventory">
                         <i class="fa-solid fa-box"></i>
                         <span>Add Product</span>
                     </a>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                    <a href="#" class="quick-action-card">
+                    <a href="#" class="quick-action-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C;" data-bs-toggle="tooltip" title="Track order status and deliveries">
                         <i class="fa-solid fa-truck"></i>
                         <span>Track Orders</span>
                     </a>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                    <a href="{{ route('reports.sales') }}" class="quick-action-card">
+                    <a href="{{ route('reports.sales') }}" class="quick-action-card" style="background-color: #2a2a2a; border: 2px solid #FFE45C;" data-bs-toggle="tooltip" title="View sales and inventory reports">
                         <i class="fa-solid fa-chart-simple"></i>
                         <span>View Reports</span>
                     </a>
@@ -132,23 +132,26 @@
         <div class="row mb-4">
             <!-- Recent Orders Table -->
             <div class="col-md-8">
-                <div class="card h-100">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
-                        <h5 class="card-title mb-0">Recent Orders</h5>
-                        <a href="{{ route('orders.history') }}" class="btn btn-sm btn-outline-primary">
+                <div class="card h-100" style="background-color: #2a2a2a; border: 1px solid #444;">
+                    <div class="card-header d-flex justify-content-between align-items-center py-2" style="background-color: #2a2a2a; border-bottom: 1px solid #444;">
+                        <h5 class="card-title mb-0" style="color: #ffffff; font-weight: 600;">
+                            Recent Orders
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Latest orders processed in the system"></i>
+                        </h5>
+                        <a href="{{ route('orders.history') }}" class="btn btn-sm" style="background-color: #444; color: #ffffff; font-weight: 500;" data-bs-toggle="tooltip" title="View complete order history">
                             <i class="fas fa-history me-1"></i> Order History
                         </a>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-0 text-white">
                         <div class="table-responsive" style="max-height: 220px;">
-                            <table class="table table-hover mb-0">
+                            <table class="table table-hover mb-0 text-white">
                                 <thead>
                                     <tr>
-                                        <th class="py-2">Order #</th>
-                                        <th class="py-2">Date</th>
-                                        <th class="py-2">Items</th>
-                                        <th class="text-end py-2">Amount</th>
-                                        <th class="py-2">Status</th>
+                                        <th class="py-2 text-white">Order #</th>
+                                        <th class="py-2 text-white">Date</th>
+                                        <th class="py-2 text-white">Items</th>
+                                        <th class="text-end py-2 text-white">Amount</th>
+                                        <th class="py-2 text-white">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody id="recent-orders-body">
@@ -160,17 +163,20 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card h-100">
-                    <div class="card-header bg-white py-2">
-                        <h5 class="card-title mb-0">Top Selling Products</h5>
+                <div class="card h-100" style="background-color: #2a2a2a; border: 1px solid #444;">
+                    <div class="card-header py-2" style="background-color: #2a2a2a; border-bottom: 1px solid #444;">
+                        <h5 class="card-title mb-0" style="color: #ffffff; font-weight: 600;">
+                            Top Selling Products
+                            <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Products with the highest sales volume"></i>
+                        </h5>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-0 text-white">
                         <div class="table-responsive" style="max-height: 220px;">
-                            <table class="table table-hover align-middle mb-0">
+                            <table class="table table-hover align-middle mb-0 text-white">
                                 <thead>
                                     <tr>
-                                        <th class="py-2">Product</th>
-                                        <th class="text-end py-2">Sales</th>
+                                        <th class="py-2 text-white">Product</th>
+                                        <th class="text-end py-2 text-white">Sales</th>
                                     </tr>
                                 </thead>
                                 <tbody id="top-products-body">
@@ -268,6 +274,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             updateDashboardData();
             setInterval(updateDashboardData, 300000);
+            
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
         });
     </script>
 </body>

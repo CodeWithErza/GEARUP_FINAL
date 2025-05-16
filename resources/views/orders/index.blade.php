@@ -11,6 +11,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-shopping-cart me-2" style="color: var(--accent);"></i>
                             Product Catalog
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Select products to add to the order"></i>
                         </h5>
                     </div>
                     <div class="card-body">
@@ -23,13 +24,13 @@
                                             <i class="fas fa-barcode"></i>
                                         </span>
                                         <input type="text" class="form-control" id="barcodeInput" placeholder="Scan or enter barcode">
-                                        <button class="btn btn-accent" type="button" id="searchBarcode">
+                                        <button class="btn btn-accent" type="button" id="searchBarcode" data-bs-toggle="tooltip" title="Search for product by barcode">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <button class="btn btn-accent" type="button" id="toggleScanner">
+                                    <button class="btn btn-accent" type="button" id="toggleScanner" data-bs-toggle="tooltip" title="Use camera to scan barcodes">
                                         <i class="fas fa-camera me-1"></i>
                                         Toggle Barcode Scanner
                                     </button>
@@ -51,11 +52,11 @@
                                 <div class="d-flex gap-2">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="productSearch" placeholder="Search products...">
-                                        <button class="btn btn-accent" type="button">
+                                        <button class="btn btn-accent" type="button" data-bs-toggle="tooltip" title="Search products by name or description">
                                             <i class="fas fa-search"></i>
                                         </button>
                                     </div>
-                                    <select class="form-select" id="categoryFilter">
+                                    <select class="form-select" id="categoryFilter" data-bs-toggle="tooltip" title="Filter products by category">
                                         <option value="">All Categories</option>
                                         <option value="interior">Interior</option>
                                         <option value="exterior">Exterior</option>
@@ -70,8 +71,8 @@
                             </div>
                         </div>
                     </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
 
             <!-- Right Column - Order Details -->
             <div class="col-lg-4">
@@ -80,8 +81,9 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-file-invoice me-2" style="color: var(--accent);"></i>
                             Order Summary
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Current order details and total"></i>
                         </h5>
-                        <button class="btn btn-sm btn-accent" id="clearOrder">
+                        <button class="btn btn-sm btn-accent" id="clearOrder" data-bs-toggle="tooltip" title="Remove all items from order">
                             <i class="fas fa-trash me-1"></i>Clear
                         </button>
                     </div>
@@ -109,13 +111,13 @@
                                     </tr>
                                 </tbody>
                             </table>
-            </div>
+                        </div>
 
                         <!-- Customer Information -->
                         <div class="mb-3">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <h6 class="fw-bold mb-0">Customer Information</h6>
-                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewCustomersModal">
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewCustomersModal" data-bs-toggle="tooltip" title="View and select from all customers">
                                     <i class="fas fa-users me-1"></i>View All
                                 </button>
                             </div>
@@ -138,7 +140,10 @@
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content bg-light">
                                     <div class="modal-header bg-dark text-white">
-                                        <h5 class="modal-title"><i class="fas fa-users me-2" style="color: var(--accent);"></i>Customer List</h5>
+                                        <h5 class="modal-title">
+                                            <i class="fas fa-users me-2" style="color: var(--accent);"></i>Customer List
+                                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Select a customer for this order"></i>
+                                        </h5>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body p-3">
@@ -146,7 +151,7 @@
                                         <div class="d-flex justify-content-end mb-3">
                                             <div class="input-group" style="width: auto;">
                                                 <input type="text" class="form-control bg-white border border-secondary shadow-sm" id="customerSearch" placeholder="Search customers..." style="color: #000; font-weight: normal; border-width: 2px !important; outline: none; box-shadow: 0 0 0 0.25rem rgba(108, 117, 125, 0.15);">
-                                                <button class="btn btn-accent" type="button">
+                                                <button class="btn btn-accent" type="button" id="searchCustomersBtn">
                                                     <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
@@ -163,26 +168,9 @@
                                                         <th class="text-end">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="customerTableBody">
                                                     <tr>
-                                                        <td>Maria Santos</td>
-                                                        <td>+63 912 345 6789</td>
-                                                        <td>maria@example.com</td>
-                                                        <td class="text-end">
-                                                            <button class="btn btn-accent btn-sm select-customer">
-                                                                Select Customer
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Juan dela Cruz</td>
-                                                        <td>+63 923 456 7890</td>
-                                                        <td>juan@example.com</td>
-                                                        <td class="text-end">
-                                                            <button class="btn btn-accent btn-sm select-customer">
-                                                                Select Customer
-                                                            </button>
-                                                        </td>
+                                                        <td colspan="4" class="text-center">Loading customers...</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -216,70 +204,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-between fw-bold">
-                                <span>Total:</span>
-                                <span id="totalAmount">₱0</span>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-3">
+                                <span class="fw-bold">Total:</span>
+                                <span class="fw-bold text-success fs-5" id="totalAmount">₱0</span>
+                            </div>
+                            <div class="d-grid">
+                                <button type="button" id="completeOrderBtn" class="btn btn-accent" data-bs-toggle="tooltip" title="Process and save this order">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    Complete Order
+                                </button>
                             </div>
                         </div>
-
-                        <!-- Order Notes -->
-                        <div class="mb-3">
-                            <button class="btn btn-link text-accent p-0 mb-2 d-flex align-items-center w-100" type="button" data-bs-toggle="collapse" data-bs-target="#orderNotesCollapse" aria-expanded="false" aria-controls="orderNotesCollapse">
-                                <i class="fas fa-sticky-note me-2"></i>
-                                <h6 class="fw-bold mb-0">Notes</h6>
-                                <small class="ms-2 text-muted">(Optional)</small>
-                                <i class="fas fa-chevron-down ms-auto"></i>
-                            </button>
-                            <div class="collapse" id="orderNotesCollapse">
-                                <textarea class="form-control form-control-sm" id="orderNotes" rows="2" placeholder="Add notes about the order..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Payment Method -->
-                        <div class="mb-3">
-                            <h6 class="fw-bold mb-2">Payment Method</h6>
-                            <select class="form-select form-select-sm mb-2" id="paymentMethod">
-                                <option value="cash">Cash</option>
-                                <option value="gcash">GCash</option>
-                                <option value="maya">Maya</option>
-                            </select>
-
-                            <!-- Cash Payment Details -->
-                            <div id="cashPaymentDetails">
-                                <div class="mb-2">
-                                    <label class="form-label small">Amount Received</label>
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="amountReceived" placeholder="0">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span>Change:</span>
-                                    <span id="changeAmount" class="fw-bold">₱0</span>
-                                </div>
-                            </div>
-
-                            <!-- E-wallet Payment Details (hidden by default) -->
-                            <div id="ewalletPaymentDetails" style="display: none;">
-                                <div class="mb-2">
-                                    <label class="form-label small">Reference Number</label>
-                                    <input type="text" class="form-control form-control-sm" id="ewalletReference" placeholder="Enter reference number">
-                                </div>
-                                <div class="mb-2">
-                                    <label class="form-label small">Amount Paid</label>
-                                    <div class="input-group input-group-sm">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" class="form-control" id="ewalletAmount" placeholder="0">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Complete Order Button -->
-                        <button class="btn btn-accent w-100 mt-auto py-2 fs-5 fw-bold" id="completeOrder" disabled>
-                            <i class="fas fa-check-circle me-1"></i>
-                            Complete Order
-                        </button>
                     </div>
                 </div>
             </div>
@@ -389,6 +325,8 @@
             z-index: 1000;
             max-height: 200px;
             overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 4px 4px;
         }
         
         .suggestion-item {
@@ -397,10 +335,19 @@
             color: #212529;
             font-weight: normal;
             transition: background-color 0.2s;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .suggestion-item:last-child {
+            border-bottom: none;
         }
         
         .suggestion-item:hover {
-            background-color: rgba(0, 0, 0, 0.05);
+            background-color: rgba(255, 228, 92, 0.1);
+        }
+        
+        .suggestion-item small {
+            opacity: 0.7;
         }
     </style>
     @endpush
@@ -411,6 +358,160 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Global variables
+            let orderItems = [];
+            let customers = [];
+            
+            // Load all customers when the page loads
+            fetchCustomers();
+            
+            // Function to fetch all customers
+            async function fetchCustomers() {
+                try {
+                    const response = await fetch('/api/customers');
+                    customers = await response.json();
+                    populateCustomerTable(customers);
+                } catch (error) {
+                    console.error('Error fetching customers:', error);
+                }
+            }
+            
+            // Function to populate customer table
+            function populateCustomerTable(customers) {
+                const tableBody = document.getElementById('customerTableBody');
+                
+                if (customers.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center">No customers found</td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                tableBody.innerHTML = customers.map(customer => `
+                    <tr>
+                        <td>${customer.name}</td>
+                        <td>${customer.phone || '-'}</td>
+                        <td>${customer.email || '-'}</td>
+                        <td class="text-end">
+                            <button class="btn btn-accent btn-sm select-customer" 
+                                data-name="${customer.name}" 
+                                data-phone="${customer.phone || ''}" 
+                                data-email="${customer.email || ''}">
+                                Select Customer
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // Add event listeners to select buttons
+                document.querySelectorAll('.select-customer').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const name = this.dataset.name;
+                        const phone = this.dataset.phone;
+                        const email = this.dataset.email;
+                        
+                        document.getElementById('customerName').value = name;
+                        document.getElementById('customerPhone').value = phone;
+                        document.getElementById('customerEmail').value = email;
+                        
+                        bootstrap.Modal.getInstance(document.getElementById('viewCustomersModal')).hide();
+                    });
+                });
+            }
+            
+            // Customer name input for autocomplete
+            const customerNameInput = document.getElementById('customerName');
+            const customerSuggestions = document.querySelector('.customer-suggestions');
+            
+            // Customer search in modal
+            const customerSearchInput = document.getElementById('customerSearch');
+            const searchCustomersBtn = document.getElementById('searchCustomersBtn');
+            
+            // Handle customer search in modal
+            searchCustomersBtn.addEventListener('click', searchCustomers);
+            customerSearchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    searchCustomers();
+                }
+            });
+            
+            // Function to search customers
+            async function searchCustomers() {
+                const query = customerSearchInput.value.trim();
+                
+                if (!query) {
+                    fetchCustomers(); // If empty, load all customers
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/api/customers/search?q=${encodeURIComponent(query)}`);
+                    const results = await response.json();
+                    populateCustomerTable(results);
+                } catch (error) {
+                    console.error('Error searching customers:', error);
+                }
+            }
+            
+            // Handle customer name input for autocomplete
+            customerNameInput.addEventListener('input', async function() {
+                const value = this.value.trim();
+                
+                if (value.length < 2) {
+                    customerSuggestions.style.display = 'none';
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/api/customers/search?q=${encodeURIComponent(value)}`);
+                    const results = await response.json();
+                    
+                    if (results.length > 0) {
+                        customerSuggestions.innerHTML = results.map(customer => `
+                            <div class="suggestion-item" 
+                                data-name="${customer.name}"
+                                data-phone="${customer.phone || ''}" 
+                                data-email="${customer.email || ''}">
+                                ${customer.name}
+                                ${customer.phone ? `<small class="text-muted ms-2">${customer.phone}</small>` : ''}
+                            </div>
+                        `).join('');
+                        
+                        customerSuggestions.style.display = 'block';
+                        
+                        // Add click event to suggestions
+                        document.querySelectorAll('.suggestion-item').forEach(item => {
+                            item.addEventListener('click', function() {
+                                customerNameInput.value = this.dataset.name;
+                                document.getElementById('customerPhone').value = this.dataset.phone;
+                                document.getElementById('customerEmail').value = this.dataset.email;
+                                customerSuggestions.style.display = 'none';
+                                
+                                // Add visual feedback for customer selection
+                                customerNameInput.classList.add('border-success');
+                                setTimeout(() => {
+                                    customerNameInput.classList.remove('border-success');
+                                }, 1500);
+                            });
+                        });
+                    } else {
+                        customerSuggestions.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error('Error fetching customer suggestions:', error);
+                    customerSuggestions.style.display = 'none';
+                }
+            });
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!customerNameInput.contains(e.target) && !customerSuggestions.contains(e.target)) {
+                    customerSuggestions.style.display = 'none';
+                }
+            });
+            
             // Check if URL has #viewCustomers hash and open the modal if it does
             if (window.location.hash === '#viewCustomers') {
                 const customersModal = new bootstrap.Modal(document.getElementById('viewCustomersModal'));
@@ -421,7 +522,6 @@
             
             let isScanning = false;
             let products = [];
-            let orderItems = [];
 
             // Fetch products on page load
             fetchProducts();
@@ -902,6 +1002,9 @@
                         // Create print receipt button
                         const printReceiptUrl = `/orders/${orderId}/receipt`;
                         
+                        // Refresh the customer list to include any new customers
+                        fetchCustomers();
+                        
                         // Success message with options - with fallback if SweetAlert is not loaded
                         if (typeof Swal !== 'undefined') {
                             Swal.fire({
@@ -1133,88 +1236,17 @@
                 });
             });
 
-            const customerNameInput = document.getElementById('customerName');
-            const customerSuggestions = document.querySelector('.customer-suggestions');
+            // Initialize all tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
             
-            // Sample customer data (replace with actual data from backend)
-            const customers = [
-                { name: 'Maria Santos', phone: '+63 912 345 6789', email: 'maria@example.com' },
-                { name: 'Juan dela Cruz', phone: '+63 923 456 7890', email: 'juan@example.com' },
-                // Add more customer data here
-            ];
-
-            // Show suggestions when typing
-            customerNameInput.addEventListener('input', function() {
-                const value = this.value.toLowerCase();
-                if (value.length < 2) {
-                    customerSuggestions.style.display = 'none';
-                    return;
-                }
-
-                const filtered = customers.filter(customer => 
-                    customer.name.toLowerCase().includes(value)
-                );
-
-                if (filtered.length > 0) {
-                    customerSuggestions.innerHTML = filtered.map(customer => `
-                        <div class="suggestion-item" data-phone="${customer.phone}" data-email="${customer.email}">
-                            ${customer.name}
-                        </div>
-                    `).join('');
-                    customerSuggestions.style.display = 'block';
-
-                    // Add click event to suggestions
-                    document.querySelectorAll('.suggestion-item').forEach(item => {
-                        item.addEventListener('click', function() {
-                            customerNameInput.value = this.textContent.trim();
-                            document.getElementById('customerPhone').value = this.dataset.phone;
-                            document.getElementById('customerEmail').value = this.dataset.email;
-                            customerSuggestions.style.display = 'none';
-                        });
-                    });
-                } else {
-                    customerSuggestions.style.display = 'none';
-                }
-            });
-
-            // Hide suggestions when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!customerNameInput.contains(e.target) && !customerSuggestions.contains(e.target)) {
-                    customerSuggestions.style.display = 'none';
-                }
-            });
-
-            // Handle customer selection from modal
-            document.querySelectorAll('.select-customer').forEach(button => {
-                button.addEventListener('click', function() {
-                    const row = this.closest('tr');
-                    const name = row.cells[0].textContent;
-                    const phone = row.cells[1].textContent;
-                    const email = row.cells[2].textContent;
-
-                    document.getElementById('customerName').value = name;
-                    document.getElementById('customerPhone').value = phone;
-                    document.getElementById('customerEmail').value = email;
-
-                    bootstrap.Modal.getInstance(document.getElementById('viewCustomersModal')).hide();
-                });
-            });
-
-            // Customer search functionality
-            document.getElementById('customerSearch').addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const rows = document.querySelectorAll('#viewCustomersModal tbody tr');
-                
-                rows.forEach(row => {
-                    const name = row.cells[0].textContent.toLowerCase();
-                    const phone = row.cells[1].textContent.toLowerCase();
-                    const email = row.cells[2].textContent.toLowerCase();
-                    
-                    const matches = name.includes(searchTerm) || 
-                                   phone.includes(searchTerm) || 
-                                   email.includes(searchTerm);
-                    
-                    row.style.display = matches ? '' : 'none';
+            // Reinitialize tooltips when modal is shown
+            document.getElementById('viewCustomersModal').addEventListener('shown.bs.modal', function () {
+                var modalTooltipTriggerList = [].slice.call(document.querySelectorAll('#viewCustomersModal [data-bs-toggle="tooltip"]'))
+                var modalTooltipList = modalTooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
                 });
             });
         });

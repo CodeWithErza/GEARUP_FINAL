@@ -326,7 +326,7 @@ class ReportController extends Controller
         // Get search query if any
         $search = $request->input('search');
 
-        $query = OrderItem::select(
+        $baseQuery = OrderItem::select(
                 'products.id as product_id',
                 'products.name as product_name',
                 'categories.name as category_name',
@@ -343,13 +343,23 @@ class ReportController extends Controller
 
         // Apply search filter if provided
         if ($search) {
-            $query->where(function($q) use ($search) {
+            $baseQuery->where(function($q) use ($search) {
                 $q->where('products.name', 'like', "%{$search}%")
                   ->orWhere('categories.name', 'like', "%{$search}%");
             });
         }
 
-        $salesDetails = $query->groupBy(
+        // Clone the query for summary calculations
+        $summaryQuery = clone $baseQuery;
+        
+        // Get summary totals (all matching records)
+        $summary = $summaryQuery->select(
+            DB::raw('SUM(order_items.quantity) as total_quantity'),
+            DB::raw('SUM(order_items.subtotal) as total_sales')
+        )->first();
+
+        // Execute the main query with pagination
+        $salesDetails = $baseQuery->groupBy(
                 'products.id',
                 'products.name',
                 'products.price',
@@ -360,6 +370,10 @@ class ReportController extends Controller
 
         return response()->json([
             'sales_details' => $salesDetails,
+            'summary' => [
+                'total_quantity' => $summary->total_quantity ?? 0,
+                'total_sales' => $summary->total_sales ?? 0
+            ],
             'date_range' => [
                 'start' => $startDate->format('Y-m-d'),
                 'end' => $endDate->format('Y-m-d')

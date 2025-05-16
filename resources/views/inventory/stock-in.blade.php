@@ -21,6 +21,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-arrow-down me-2" style="color: #28a745;"></i>
                             Stock In Details
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Record products entering inventory"></i>
                         </h5>
                     </div>
                     <div class="card-body">
@@ -66,11 +67,11 @@
                                 <label class="form-label">Search Product</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="searchProduct" placeholder="Search by product name or SKU">
-                                    <button class="btn btn-accent" type="button" id="openProductModal">
+                                    <button class="btn btn-accent" type="button" id="openProductModal" data-bs-toggle="tooltip" title="Browse all available products">
                                         <i class="fas fa-search me-1"></i>
                                         Browse
                                     </button>
-                                    <button class="btn btn-light" type="button" id="scanBarcode">
+                                    <button class="btn btn-light" type="button" id="scanBarcode" data-bs-toggle="tooltip" title="Scan product barcode">
                                         <i class="fas fa-barcode me-1"></i>
                                         Scan
                                     </button>
@@ -126,6 +127,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-history me-2"></i>
                             Recent Stock Ins
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Recently processed inventory additions"></i>
                         </h5>
                     </div>
                     <div class="card-body p-0 bg-white" style="overflow-y: auto; height: 250px;">
@@ -155,6 +157,7 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-calculator me-2"></i>
                             Order Summary
+                            <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Summary of current stock-in transaction"></i>
                         </h5>
                     </div>
                     <div class="card-body bg-white">
@@ -171,7 +174,7 @@
                             <span class="badge bg-success rounded-pill px-3 py-2" id="summaryTotalAmount">₱0.00</span>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" form="stockInForm" class="btn btn-accent">
+                            <button type="submit" form="stockInForm" class="btn btn-accent" data-bs-toggle="tooltip" title="Record this inventory addition">
                                 <i class="fas fa-check-circle me-1"></i>
                                 Process Stock In
                             </button>
@@ -187,7 +190,10 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="productSelectionModalLabel">Select Products</h5>
+                    <h5 class="modal-title" id="productSelectionModalLabel">
+                        Select Products
+                        <i class="fas fa-info-circle ms-2" data-bs-toggle="tooltip" title="Choose products to add to inventory"></i>
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -524,6 +530,20 @@
             document.getElementById('scanBarcode').addEventListener('click', function() {
                 const scannerModal = new bootstrap.Modal(document.getElementById('scannerModal'));
                 scannerModal.show();
+            });
+
+            // Initialize all tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Reinitialize tooltips when modal is shown
+            document.getElementById('productSelectionModal').addEventListener('shown.bs.modal', function () {
+                var modalTooltipTriggerList = [].slice.call(document.querySelectorAll('#productSelectionModal [data-bs-toggle="tooltip"]'))
+                var modalTooltipList = modalTooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                });
             });
         });
     </script>

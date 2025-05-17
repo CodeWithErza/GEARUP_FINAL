@@ -567,7 +567,7 @@
                 // Update product count
                 if (productCount) {
                     if (searchTerm || categoryId) {
-                        productCount.textContent = `Showing ${visibleCount} of ${productRows.length} products`;
+                    productCount.textContent = `Showing ${visibleCount} of ${productRows.length} products`;
                     }
                     // When not filtering, we don't update the count as it's controlled by Laravel's pagination
                 }
@@ -737,26 +737,26 @@
                 const action = this.dataset.action;
                 const isActive = action === 'activate';
                 const modal = bootstrap.Modal.getInstance(document.getElementById('productStatusModal'));
-                
-                try {
-                    const response = await fetch(`/products/${productId}/toggle-active`, {
-                        method: 'PUT',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            is_active: isActive
-                        })
-                    });
                     
-                    const result = await response.json();
+                    try {
+                        const response = await fetch(`/products/${productId}/toggle-active`, {
+                            method: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({
+                            is_active: isActive
+                            })
+                        });
+                        
+                        const result = await response.json();
                     
                     // Hide the modal
                     modal.hide();
-                    
-                    if (response.ok) {
+                        
+                        if (response.ok) {
                         // Show success notification
                         showProductNotification(
                             isActive 
@@ -764,7 +764,7 @@
                                 : 'Product marked as inactive. It will no longer appear in sales forms.'
                         );
                         
-                        // Update the UI without reloading the page
+                            // Update the UI without reloading the page
                         const button = document.querySelector(`.${isActive ? 'activate' : 'delete'}-product[data-product-id="${productId}"]`);
                         if (button) {
                             const row = button.closest('tr');
@@ -795,11 +795,11 @@
                                 } else {
                                     // Replace deactivate button with activate button
                                     button.outerHTML = `
-                                        <button class="btn btn-sm btn-outline-success activate-product" title="Activate Product" data-product-id="${productId}">
-                                            <i class="fas fa-redo"></i>
-                                        </button>
-                                    `;
-                                    // Add event listener to the new button
+                                    <button class="btn btn-sm btn-outline-success activate-product" title="Activate Product" data-product-id="${productId}">
+                                        <i class="fas fa-redo"></i>
+                                    </button>
+                                `;
+                                // Add event listener to the new button
                                     btnGroup.querySelector('.activate-product').addEventListener('click', function() {
                                         fetchProduct(productId).then(product => {
                                             showProductStatusModal(product, 'activate');
@@ -807,15 +807,15 @@
                                     });
                                 }
                             }
-                        }
-                    } else {
+                            }
+                        } else {
                         showProductNotification(
                             `Error: ${result.error || `Failed to ${isActive ? 'activate' : 'deactivate'} product`}`, 
                             'error'
                         );
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
                     modal.hide();
                     showProductNotification(`An error occurred while updating the product status`, 'error');
                 }
@@ -887,7 +887,7 @@
                     // Set the product ID and action for the confirm button
                     confirmBtn.dataset.productId = product.id;
                     confirmBtn.dataset.action = 'deactivate';
-                } else {
+                    } else {
                     // Configure for activation
                     header.className = 'modal-header bg-success text-white';
                     actionText.textContent = 'Confirm Product Activation';

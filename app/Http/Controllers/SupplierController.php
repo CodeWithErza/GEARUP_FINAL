@@ -111,4 +111,16 @@ class SupplierController extends Controller
             
         return response()->json($suppliers);
     }
+    
+    public function getAllSuppliers()
+    {
+        $suppliers = Supplier::withCount('stockins')->get();
+        
+        // Add product count for each supplier
+        $suppliers->each(function ($supplier) {
+            $supplier->product_count = $supplier->getProductCountAttribute();
+        });
+        
+        return response()->json($suppliers);
+    }
 } 

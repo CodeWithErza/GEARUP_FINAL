@@ -54,6 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/suppliers/{supplier}', [SupplierController::class, 'show'])->name('suppliers.show');
     Route::put('/suppliers/{supplier}', [SupplierController::class, 'update'])->name('suppliers.update');
     Route::delete('/suppliers/{supplier}', [SupplierController::class, 'destroy'])->name('suppliers.destroy');
+    Route::get('/suppliers-data/all', [SupplierController::class, 'getAllSuppliers'])->name('suppliers.all');
 
     // Product Routes
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');

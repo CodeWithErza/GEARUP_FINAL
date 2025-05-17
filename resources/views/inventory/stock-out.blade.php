@@ -246,13 +246,13 @@
                         let aValue = a.children[headerIndex].textContent.trim();
                         let bValue = b.children[headerIndex].textContent.trim();
                         
-                        // Special handling for quantity inputs
+                        // Special handling for quantity inputs and current stock
                         if (headerIndex === 3) { // Quantity column
                             aValue = parseFloat(a.querySelector('.new-count')?.value || 0);
                             bValue = parseFloat(b.querySelector('.new-count')?.value || 0);
-                        } else if (headerIndex === 2) { // Current Stock column
-                            aValue = parseFloat(aValue || 0);
-                            bValue = parseFloat(bValue || 0);
+                        } else if (headerIndex === 2) { // Current Stock column - convert to number
+                            aValue = parseFloat(aValue.replace(/[^\d.-]/g, '') || 0);
+                            bValue = parseFloat(bValue.replace(/[^\d.-]/g, '') || 0);
                         }
                         
                         // If numeric values, compare as numbers

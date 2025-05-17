@@ -116,7 +116,7 @@ class StockinController extends Controller
             Log::info('Stock-in processed successfully');
 
             return redirect()
-                ->route('inventory')
+                ->route('inventory.stock-in')
                 ->with('success', 'Stock in completed successfully');
 
         } catch (\Exception $e) {

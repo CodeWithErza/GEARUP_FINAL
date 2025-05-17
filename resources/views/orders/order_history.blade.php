@@ -5,7 +5,7 @@
             <!-- Order History Table (Left Column) -->
             <div class="col-lg-8">
                 <div class="card h-100">
-                    <div class="card-header bg-white">
+                    <div class="card-header">
                         <h5 class="card-title mb-0">Order History</h5>
                         
                         <div class="mt-3">
@@ -79,10 +79,10 @@
                                     <!-- Orders will be loaded dynamically -->
                                 </tbody>
                             </table>
-                            <div id="orders-pagination" class="mt-3">
-                                <!-- Pagination will be loaded dynamically -->
-                            </div>
                         </div>
+                    </div>
+                    <div class="card-footer" id="orders-pagination">
+                        <!-- Pagination will be loaded dynamically -->
                     </div>
                 </div>
             </div>
@@ -90,7 +90,7 @@
             <!-- Order Details (Right Column) -->
             <div class="col-lg-4">
                 <div class="card h-100">
-                    <div class="card-header bg-white">
+                    <div class="card-header">
                         <h5 class="card-title mb-0">Order Details</h5>
                     </div>
                     <div class="card-body order-details-body">
@@ -199,6 +199,49 @@
         </div>
     </div>
 
+    <!-- Cancel Order Confirmation Modal -->
+    <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-light">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="cancelOrderModalLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirm Order Cancellation
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel order <strong id="cancel-order-number">ORD-0000</strong>?</p>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>What happens when you cancel an order:</strong>
+                        <ul class="mb-0 mt-1">
+                            <li>The order status will be changed to "cancelled"</li>
+                            <li>All product quantities in this order will be returned to inventory</li>
+                            <li>The order cannot be modified after cancellation</li>
+                        </ul>
+                    </div>
+                    <p class="text-danger"><small><strong>Note:</strong> This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep Order</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelOrderBtn">Yes, Cancel Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+        <div id="orderToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="orderToastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="orderToastMessage"></div>
+        </div>
+    </div>
+
     @push('styles')
     <!-- Print-specific styles -->
     <style media="print">
@@ -230,17 +273,153 @@
     </style>
     <style>
         .order-history-body {
-            height: calc(100vh - 250px);
-            overflow-y: auto;
+            flex: 1;
+            padding: 0;
+            overflow: hidden;
+            min-height: 0;
         }
         .order-row {
             cursor: pointer;
         }
         .order-row:hover {
-            background-color: rgba(0,0,0,.03);
+            background-color: rgba(255, 255, 255, 0.05);
         }
         .order-row.selected {
-            background-color: rgba(0,0,0,.05);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        /* Pagination styling - copied from products management */
+        .pagination {
+            margin: 0;
+        }
+        
+        #orders-pagination {
+            background-color: #2a2a2a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 60px; /* Ensure consistent height with or without pagination */
+        }
+        
+        #orders-pagination .pagination {
+            justify-content: flex-end;
+            margin: 0;
+        }
+        
+        .card-header, .card-footer {
+            color: #fff;
+        }
+        
+        .card-header {
+            background-color: #2a2a2a !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Make pagination elements stand out better against dark background */
+        .pagination .page-link {
+            background-color: #333;
+            border-color: #444;
+            color: #fff;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: var(--accent, #FFE45C);
+            border-color: var(--accent, #FFE45C);
+            color: #333;
+        }
+        
+        .pagination .page-item.disabled .page-link {
+            background-color: #222;
+            border-color: #444;
+            color: #777;
+        }
+
+        .table-responsive {
+            height: 100%;
+            max-height: none;
+        }
+
+        /* Keep header visible */
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #2a2a2a;
+            z-index: 1;
+            color: #fff;
+        }
+
+        /* Custom scrollbar styles */
+        .table-responsive::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+
+        /* New styles for full-height layout */
+        .container-fluid {
+            min-height: calc(100vh - 100px);
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 1.5rem;
+        }
+
+        .row:not(.g-2):not(.mb-3) {
+            flex: 1;
+            min-height: 0; /* Important for Firefox */
+            margin-bottom: 1rem;
+        }
+
+        .card.h-100 {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body {
+            flex: 1;
+            padding: 0;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        .order-details-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .order-details-body .table-responsive {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        /* Table styling */
+        .table {
+            color: #e0e0e0;
+            margin-bottom: 0;
+        }
+        
+        .table > :not(caption) > * > * {
+            background-color: transparent;
+            border-bottom-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .table > thead > tr > th {
+            border-bottom-width: 1px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
         }
     </style>
     @endpush
@@ -258,6 +437,31 @@
             sort_by: 'order_number'
         };
 
+        // Function to show notifications
+        function showOrderNotification(message, type = 'success') {
+            const toast = document.getElementById('orderToast');
+            const toastTitle = document.getElementById('orderToastTitle');
+            const toastMessage = document.getElementById('orderToastMessage');
+            
+            // Set toast content
+            toastMessage.textContent = message;
+            
+            // Set appropriate styling based on type
+            if (type === 'success') {
+                toast.classList.remove('bg-danger', 'text-white');
+                toast.classList.add('bg-success', 'text-white');
+                toastTitle.textContent = 'Success';
+            } else if (type === 'error') {
+                toast.classList.remove('bg-success', 'text-white');
+                toast.classList.add('bg-danger', 'text-white');
+                toastTitle.textContent = 'Error';
+            }
+            
+            // Create Bootstrap toast instance and show it
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+        }
+
         // Function to handle order updates
         function updateOrder(orderId) {
             // Redirect to the order edit page
@@ -266,36 +470,68 @@
 
         // Function to handle order cancellation
         function cancelOrder(orderId) {
-            if (confirm('Are you sure you want to cancel this order?')) {
-                // Send cancellation request to the server
-                fetch(`/orders/${orderId}/cancel`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
+            // Get the order details to show in the confirmation modal
+            fetch(`/orders/${orderId}/details`)
+                .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        alert('Order cancelled successfully');
-                        // Reload the orders list
-                        loadOrders(currentPage);
-                    } else {
-                        alert('Failed to cancel order: ' + data.message);
-                    }
+                    const order = data.order;
+                    
+                    // Set the order number in the modal
+                    document.getElementById('cancel-order-number').textContent = order.order_number;
+                    
+                    // Set up the confirmation button
+                    const confirmButton = document.getElementById('confirmCancelOrderBtn');
+                    confirmButton.dataset.orderId = orderId;
+                    
+                    // Show the modal
+                    const modal = new bootstrap.Modal(document.getElementById('cancelOrderModal'));
+                    modal.show();
                 })
                 .catch(error => {
-                    console.error('Error cancelling order:', error);
-                    alert('An error occurred while cancelling the order');
+                    console.error('Error fetching order details:', error);
+                    showOrderNotification('Failed to load order details for cancellation', 'error');
                 });
-            }
         }
+        
+        // Handle confirmed cancellation
+        document.getElementById('confirmCancelOrderBtn').addEventListener('click', function() {
+            const orderId = this.dataset.orderId;
+            const modal = bootstrap.Modal.getInstance(document.getElementById('cancelOrderModal'));
+            
+            // Send cancellation request to the server
+            fetch(`/orders/${orderId}/cancel`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Hide the modal
+                modal.hide();
+                
+                if (data.success) {
+                    showOrderNotification('Order cancelled successfully. Product quantities have been returned to inventory.');
+                    // Reload the orders list
+                    loadOrders(currentPage);
+                    // Reload the order details
+                    loadOrderDetails(orderId);
+                } else {
+                    showOrderNotification('Failed to cancel order: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error cancelling order:', error);
+                modal.hide();
+                showOrderNotification('An error occurred while cancelling the order', 'error');
+            });
+        });
 
         // Function to print order receipt
         function printOrderReceipt(orderId) {
@@ -320,16 +556,16 @@
                     orderedItems.innerHTML = order.items.map(item => `
                         <tr>
                             <td>${item.product.name}</td>
-                            <td class="text-end">₱${parseFloat(item.price).toFixed(2)}</td>
+                            <td class="text-end">₱${parseFloat(item.price).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td class="text-center">${item.quantity}</td>
-                            <td class="text-end">₱${parseFloat(item.subtotal).toFixed(2)}</td>
+                            <td class="text-end">₱${parseFloat(item.subtotal).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                         </tr>
                     `).join('');
 
                     // Update totals
-                    document.getElementById('subtotal-amount').textContent = `₱${parseFloat(order.subtotal).toFixed(2)}`;
-                    document.getElementById('detail-vat').textContent = `₱${parseFloat(order.tax).toFixed(2)}`;
-                    document.getElementById('detail-total').textContent = `₱${parseFloat(order.total).toFixed(2)}`;
+                    document.getElementById('subtotal-amount').textContent = `₱${parseFloat(order.subtotal).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('detail-vat').textContent = `₱${parseFloat(order.tax).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('detail-total').textContent = `₱${parseFloat(order.total).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
                     // Update customer info
                     document.getElementById('detail-customer-name').textContent = order.customer.name;
@@ -338,8 +574,8 @@
 
                     // Update payment info
                     document.getElementById('detail-payment-method').textContent = order.payment_method;
-                    document.getElementById('amount-received').textContent = `₱${parseFloat(order.amount_received).toFixed(2)}`;
-                    document.getElementById('change-amount').textContent = `₱${parseFloat(order.change_amount).toFixed(2)}`;
+                    document.getElementById('amount-received').textContent = `₱${parseFloat(order.amount_received).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                    document.getElementById('change-amount').textContent = `₱${parseFloat(order.change_amount).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
 
                     if (order.updated_at !== order.created_at) {
                         document.querySelector('.update-timestamp').classList.remove('d-none');
@@ -408,7 +644,7 @@
                             <td>${order.order_number}</td>
                             <td>${order.customer.name}</td>
                             <td>${new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
-                            <td>₱${parseFloat(order.total).toFixed(2)}</td>
+                            <td>₱${parseFloat(order.total).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td>
                                 <span class="badge text-bg-${order.status === 'completed' ? 'success' : order.status === 'cancelled' ? 'danger' : 'info'}">
                                     ${order.status}
@@ -419,24 +655,35 @@
 
                     // Update pagination
                     const pagination = document.getElementById('orders-pagination');
-                    pagination.innerHTML = `
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item ${data.current_page === 1 ? 'disabled' : ''}">
-                                    <a class="page-link" href="#" onclick="loadOrders(${data.current_page - 1})">Previous</a>
-                                </li>
-                                ${Array.from({ length: data.last_page }, (_, i) => i + 1)
-                                    .map(page => `
-                                        <li class="page-item ${page === data.current_page ? 'active' : ''}">
-                                            <a class="page-link" href="#" onclick="loadOrders(${page})">${page}</a>
-                                        </li>
-                                    `).join('')}
-                                <li class="page-item ${data.current_page === data.last_page ? 'disabled' : ''}">
-                                    <a class="page-link" href="#" onclick="loadOrders(${data.current_page + 1})">Next</a>
-                                </li>
-                            </ul>
-                        </nav>
+                    
+                    // Create a div for the product count display
+                    let paginationHtml = `
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span id="orders-count">Showing ${data.from || 0} to ${data.to || 0} of ${data.total || 0} orders</span>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination">
+                                    <li class="page-item ${data.current_page === 1 ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" onclick="event.preventDefault(); loadOrders(${data.current_page - 1})">Previous</a>
+                                    </li>`;
+                    
+                    // Generate the page numbers
+                    for (let i = 1; i <= data.last_page; i++) {
+                        paginationHtml += `
+                            <li class="page-item ${i === data.current_page ? 'active' : ''}">
+                                <a class="page-link" href="#" onclick="event.preventDefault(); loadOrders(${i})">${i}</a>
+                            </li>`;
+                    }
+                    
+                    paginationHtml += `
+                                    <li class="page-item ${data.current_page === data.last_page ? 'disabled' : ''}">
+                                        <a class="page-link" href="#" onclick="event.preventDefault(); loadOrders(${data.current_page + 1})">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
                     `;
+                    
+                    pagination.innerHTML = paginationHtml;
 
                     // Add click handlers for order rows
                     document.querySelectorAll('.order-row').forEach(row => {

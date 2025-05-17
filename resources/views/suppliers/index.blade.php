@@ -20,6 +20,19 @@
         <!-- Suppliers Table -->
         <div class="row">
             <div class="col-md-12">
+                <!-- Notification container -->
+                <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+                    <div id="notificationToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto" id="toastTitle">Notification</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body" id="toastMessage">
+                            
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
@@ -383,11 +396,59 @@
         </div>
     </div>
 
+    <!-- Delete Supplier Confirmation Modal -->
+    <div class="modal fade" id="deleteSupplierModal" tabindex="-1" aria-labelledby="deleteSupplierModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content bg-light">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteSupplierModalLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirm Deletion
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this supplier?</p>
+                    <p class="text-danger"><small><strong>Note:</strong> This action cannot be undone.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteSupplierBtn">Delete Supplier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize supplier management functionality
             const addSupplierForm = document.getElementById('addSupplierForm');
             const searchInput = document.querySelector('.search-input');
+            
+            // Function to show notifications
+            function showNotification(message, type = 'success') {
+                const toast = document.getElementById('notificationToast');
+                const toastTitle = document.getElementById('toastTitle');
+                const toastMessage = document.getElementById('toastMessage');
+                
+                // Set toast content
+                toastMessage.textContent = message;
+                
+                // Set appropriate styling based on type
+                if (type === 'success') {
+                    toast.classList.remove('bg-danger', 'text-white');
+                    toast.classList.add('bg-success', 'text-white');
+                    toastTitle.textContent = 'Success';
+                } else if (type === 'error') {
+                    toast.classList.remove('bg-success', 'text-white');
+                    toast.classList.add('bg-danger', 'text-white');
+                    toastTitle.textContent = 'Error';
+                }
+                
+                // Create Bootstrap toast instance and show it
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+            }
             
             // Add Supplier Form Submit
             addSupplierForm.addEventListener('submit', async function(e) {
@@ -413,17 +474,17 @@
                         modal.hide();
                         
                         // Show success message
-                        alert(result.message);
+                        showNotification(result.message);
                         
                         // Reload the page to show new data
                         location.reload();
                     } else {
                         const errors = Object.values(result.errors).flat().join('\n');
-                        alert('Error: ' + errors);
+                        showNotification(errors, 'error');
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('An error occurred while saving the supplier. Please try again.');
+                    showNotification('An error occurred while saving the supplier. Please try again.', 'error');
                 }
             });
             
@@ -467,49 +528,84 @@
                         modal.hide();
                         
                         // Show success message
-                        alert(result.message);
+                        showNotification(result.message);
                         
                         // Reload the page to show updated data
                         location.reload();
                     } else {
                         const errors = Object.values(result.errors).flat().join('\n');
-                        alert('Error: ' + errors);
+                        showNotification(errors, 'error');
                     }
                 } catch (error) {
                     console.error('Error updating supplier:', error);
-                    alert('An error occurred while updating the supplier. Please try again.');
+                    showNotification('An error occurred while updating the supplier. Please try again.', 'error');
                 }
             });
             
             // Delete Supplier
             document.querySelectorAll('.delete-supplier').forEach(button => {
-                button.addEventListener('click', async function() {
-                    if (!confirm('Are you sure you want to delete this supplier? This action cannot be undone.')) {
-                        return;
-                    }
-                    
+                button.addEventListener('click', function() {
                     const supplierId = this.dataset.supplierId;
+                    const supplierName = this.closest('tr').querySelector('strong').textContent;
                     
-                    try {
-                        const response = await fetch(`/suppliers/${supplierId}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                            }
-                        });
-                        
-                        const result = await response.json();
-                        
-                        if (response.ok) {
-                            alert(result.message);
-                            location.reload();
-                        } else {
-                            alert('Error deleting supplier');
-                        }
-                    } catch (error) {
-                        alert('An error occurred. Please try again.');
-                    }
+                    // Show the delete modal with supplier information
+                    const modal = document.getElementById('deleteSupplierModal');
+                    const modalBody = modal.querySelector('.modal-body');
+                    
+                    // Update modal message with supplier name
+                    modalBody.innerHTML = `
+                        <p>Are you sure you want to delete <strong>${supplierName}</strong>?</p>
+                        <p class="text-danger"><small><strong>Note:</strong> This action cannot be undone.</small></p>
+                    `;
+                    
+                    // Set the supplier ID for the confirm delete button
+                    document.getElementById('confirmDeleteSupplierBtn').dataset.supplierId = supplierId;
+                    
+                    // Show the modal
+                    const deleteModal = new bootstrap.Modal(modal);
+                    deleteModal.show();
                 });
+            });
+            
+            // Handle delete confirmation
+            document.getElementById('confirmDeleteSupplierBtn').addEventListener('click', async function() {
+                const supplierId = this.dataset.supplierId;
+                const modal = bootstrap.Modal.getInstance(document.getElementById('deleteSupplierModal'));
+                
+                try {
+                    const response = await fetch(`/suppliers/${supplierId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                        }
+                    });
+                    
+                    const result = await response.json();
+                    
+                    // Hide the modal
+                    modal.hide();
+                    
+                    if (response.ok) {
+                        showNotification(result.message);
+                        
+                        // Fade out and remove the deleted supplier row
+                        const supplierRow = document.querySelector(`button[data-supplier-id="${supplierId}"]`).closest('tr');
+                        supplierRow.style.transition = 'opacity 0.5s';
+                        supplierRow.style.opacity = '0';
+                        
+                        // After fade out, remove the row and reload page
+                        setTimeout(() => {
+                            supplierRow.remove();
+                            location.reload();
+                        }, 500);
+                    } else {
+                        showNotification('Error deleting supplier', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting supplier:', error);
+                    showNotification('An error occurred. Please try again.', 'error');
+                    modal.hide();
+                }
             });
             
             // Search Functionality
@@ -585,7 +681,27 @@
                 });
                 
                 document.querySelectorAll('.delete-supplier').forEach(button => {
-                    button.addEventListener('click', deleteSupplier);
+                    button.addEventListener('click', function() {
+                        const supplierId = this.dataset.supplierId;
+                        const supplierName = this.closest('tr').querySelector('strong').textContent;
+                        
+                        // Show the delete modal with supplier information
+                        const modal = document.getElementById('deleteSupplierModal');
+                        const modalBody = modal.querySelector('.modal-body');
+                        
+                        // Update modal message with supplier name
+                        modalBody.innerHTML = `
+                            <p>Are you sure you want to delete <strong>${supplierName}</strong>?</p>
+                            <p class="text-danger"><small><strong>Note:</strong> This action cannot be undone.</small></p>
+                        `;
+                        
+                        // Set the supplier ID for the confirm delete button
+                        document.getElementById('confirmDeleteSupplierBtn').dataset.supplierId = supplierId;
+                        
+                        // Show the modal
+                        const deleteModal = new bootstrap.Modal(modal);
+                        deleteModal.show();
+                    });
                 });
             }
             
@@ -705,7 +821,7 @@
                     
                 } catch (error) {
                     console.error('Error loading supplier details:', error);
-                    alert('Failed to load supplier details. Please try again.');
+                    showNotification('Failed to load supplier details. Please try again.', 'error');
                     
                     // Keep the loading state in case of error
                     const modal = document.getElementById('viewSupplierModal');
@@ -742,7 +858,7 @@
                     document.getElementById('editSupplierForm').dataset.supplierId = supplierId;
                 } catch (error) {
                     console.error('Error loading supplier data:', error);
-                    alert('Error loading supplier data. Please try again.');
+                    showNotification('Error loading supplier data. Please try again.', 'error');
                     
                     // Reset the form completely if there was an error
                     const form = document.getElementById('editSupplierForm');
@@ -769,20 +885,90 @@
                     const result = await response.json();
                     
                     if (response.ok) {
-                        alert(result.message);
+                        showNotification(result.message);
                         location.reload();
                     } else {
-                        alert('Error deleting supplier');
+                        showNotification('Error deleting supplier', 'error');
                     }
                 } catch (error) {
                     console.error('Error deleting supplier:', error);
-                    alert('An error occurred. Please try again.');
+                    showNotification('An error occurred. Please try again.', 'error');
                 }
             }
             
             // Initialize tooltips
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
             const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            
+            // Add event listener for the sort dropdown
+            const sortSelect = document.querySelector('.sort-select');
+            if (sortSelect) {
+                sortSelect.addEventListener('change', async function() {
+                    const sortValue = this.value;
+                    let suppliers = [];
+                    
+                    try {
+                        // First, fetch all suppliers
+                        const response = await fetch('/suppliers-data/all');
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        suppliers = data;
+                        
+                        // Sort suppliers based on the selected option
+                        if (sortValue === 'name_asc') {
+                            suppliers.sort((a, b) => a.name.localeCompare(b.name));
+                        } else if (sortValue === 'name_desc') {
+                            suppliers.sort((a, b) => b.name.localeCompare(a.name));
+                        } else if (sortValue === 'recent') {
+                            suppliers.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                        } else if (sortValue === 'products') {
+                            suppliers.sort((a, b) => (b.product_count || 0) - (a.product_count || 0));
+                        }
+                        
+                        // Update the table with sorted suppliers
+                        const tbody = document.querySelector('.data-table tbody');
+                        tbody.innerHTML = suppliers.map(supplier => `
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <strong>${supplier.name}</strong>
+                                            <div class="small text-muted">Since ${new Date(supplier.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>${supplier.contact_person}</td>
+                                <td>${supplier.phone}</td>
+                                <td>${supplier.email}</td>
+                                <td>${(supplier.product_count || 0).toLocaleString()}</td>
+                                <td><span class="badge bg-${supplier.status === 'active' ? 'success' : (supplier.status === 'on_hold' ? 'warning' : 'secondary')}">${supplier.status === 'on_hold' ? 'On Hold' : supplier.status.charAt(0).toUpperCase() + supplier.status.slice(1)}</span></td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-sm btn-outline-secondary view-supplier" title="View Details" data-bs-toggle="modal" data-bs-target="#viewSupplierModal" data-supplier-id="${supplier.id}">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary edit-supplier" title="Edit Supplier" data-bs-toggle="modal" data-bs-target="#editSupplierModal" data-supplier-id="${supplier.id}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger delete-supplier" title="Delete Supplier" data-supplier-id="${supplier.id}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('');
+                        
+                        // Reattach event listeners to new buttons
+                        attachEventListeners();
+                    } catch (error) {
+                        console.error('Error sorting suppliers:', error);
+                        showNotification('Error sorting suppliers. Please try again.', 'error');
+                    }
+                });
+            }
             
             // Re-initialize tooltips after dynamic content is loaded
             const viewSupplierModal = document.getElementById('viewSupplierModal');

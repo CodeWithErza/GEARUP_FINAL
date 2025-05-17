@@ -137,7 +137,7 @@
                     <div class="card-footer">
                         <div class="d-flex justify-content-between align-items-center">
                             <span id="product-count">Showing {{ $products->firstItem() ?? 0 }} to {{ $products->lastItem() ?? 0 }} of {{ $products->total() ?? 0 }} products</span>
-                            {{ $products->links() }}
+                            <div>{{ $products->links('pagination::bootstrap-5') }}</div>
                         </div>
                     </div>
                 </div>
@@ -369,6 +369,47 @@
         </div>
     </div>
 
+    <!-- Product Inactivate/Activate Confirmation Modal -->
+    <div class="modal fade" id="productStatusModal" tabindex="-1" aria-labelledby="productStatusModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-light">
+                <div class="modal-header" id="productStatusModalHeader">
+                    <h5 class="modal-title" id="productStatusModalLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span id="productStatusActionText">Confirm Action</span>
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="productStatusConfirmMessage">Are you sure?</p>
+                    <div class="alert" id="productStatusAlert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong id="productStatusEffectsTitle">What happens next:</strong>
+                        <ul class="mb-0 mt-1" id="productStatusEffectsList">
+                            <!-- Effects will be dynamically added here -->
+                        </ul>
+                    </div>
+                    <p class="text-danger"><small><strong>Note:</strong> This will affect inventory and sales operations.</small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="cancelStatusChangeBtn">Cancel</button>
+                    <button type="button" class="btn" id="confirmStatusChangeBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 9999">
+        <div id="productToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="productToastTitle">Notification</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="productToastMessage"></div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize tooltips
@@ -525,12 +566,18 @@
                 
                 // Update product count
                 if (productCount) {
-                    productCount.textContent = `Showing ${visibleCount} of ${productRows.length} products`;
+                    if (searchTerm || categoryId) {
+                        productCount.textContent = `Showing ${visibleCount} of ${productRows.length} products`;
+                    }
+                    // When not filtering, we don't update the count as it's controlled by Laravel's pagination
                 }
                 
                 // Hide pagination when filtering is active (since we're showing/hiding rows client-side)
-                document.querySelectorAll('.pagination').forEach(container => {
-                    container.style.display = (searchTerm || categoryId) ? 'none' : '';
+                document.querySelectorAll('.card-footer .pagination').forEach(container => {
+                    const paginationContainer = container.closest('div');
+                    if (paginationContainer) {
+                        paginationContainer.style.display = (searchTerm || categoryId) ? 'none' : '';
+                    }
                 });
             }
             
@@ -656,55 +703,15 @@
                 button.addEventListener('click', async function() {
                     const productId = this.dataset.productId;
                     
-                    if (!confirm('Are you sure you want to mark this product as inactive?')) {
-                        return;
-                    }
-                    
                     try {
-                        const response = await fetch(`/products/${productId}/toggle-active`, {
-                            method: 'PUT',
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                is_active: false
-                            })
-                        });
+                        // Fetch product details to show in the modal
+                        const product = await fetchProduct(productId);
                         
-                        const result = await response.json();
-                        
-                        if (response.ok) {
-                            alert(result.message || 'Product marked as inactive');
-                            // Update the UI without reloading the page
-                            const row = this.closest('tr');
-                            const statusCell = row.querySelector('td:nth-child(7)');
-                            if (statusCell) {
-                                const statusBadge = statusCell.querySelector('.badge');
-                                if (statusBadge) {
-                                    statusBadge.className = 'badge bg-secondary';
-                                    statusBadge.textContent = 'Inactive';
-                                }
-                            }
-                            
-                            // Replace the delete button with an activate button
-                            const btnGroup = this.closest('.btn-group');
-                            if (btnGroup) {
-                                this.outerHTML = `
-                                    <button class="btn btn-sm btn-outline-success activate-product" title="Activate Product" data-product-id="${productId}">
-                                        <i class="fas fa-redo"></i>
-                                    </button>
-                                `;
-                                // Add event listener to the new button
-                                btnGroup.querySelector('.activate-product').addEventListener('click', activateProduct);
-                            }
-                        } else {
-                            alert('Error: ' + (result.error || 'Failed to mark product as inactive'));
-                        }
+                        // Show the confirmation modal with product details
+                        showProductStatusModal(product, 'deactivate');
                     } catch (error) {
-                        console.error('Error:', error);
-                        alert('An error occurred while updating the product.');
+                        console.error('Error loading product data:', error);
+                        showProductNotification('Error loading product data for deactivation', 'error');
                     }
                 });
             });
@@ -713,56 +720,206 @@
             function activateProduct() {
                 const productId = this.dataset.productId;
                 
-                if (!confirm('Are you sure you want to activate this product?')) {
-                    return;
-                }
-                
-                fetch(`/products/${productId}/toggle-active`, {
-                    method: 'PUT',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        is_active: true
+                // Fetch product details and show confirmation modal
+                fetchProduct(productId)
+                    .then(product => {
+                        showProductStatusModal(product, 'activate');
                     })
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.success) {
-                        alert(result.message || 'Product activated successfully');
+                    .catch(error => {
+                        console.error('Error loading product data:', error);
+                        showProductNotification('Error loading product data for activation', 'error');
+                    });
+            }
+            
+            // Handle confirmed status change
+            document.getElementById('confirmStatusChangeBtn').addEventListener('click', async function() {
+                const productId = this.dataset.productId;
+                const action = this.dataset.action;
+                const isActive = action === 'activate';
+                const modal = bootstrap.Modal.getInstance(document.getElementById('productStatusModal'));
+                
+                try {
+                    const response = await fetch(`/products/${productId}/toggle-active`, {
+                        method: 'PUT',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            is_active: isActive
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    // Hide the modal
+                    modal.hide();
+                    
+                    if (response.ok) {
+                        // Show success notification
+                        showProductNotification(
+                            isActive 
+                                ? 'Product activated successfully. It is now available for sales.' 
+                                : 'Product marked as inactive. It will no longer appear in sales forms.'
+                        );
                         
                         // Update the UI without reloading the page
-                        const row = this.closest('tr');
-                        const statusCell = row.querySelector('td:nth-child(7)');
-                        if (statusCell) {
-                            const statusBadge = statusCell.querySelector('.badge');
-                            if (statusBadge) {
-                                statusBadge.className = 'badge bg-success';
-                                statusBadge.textContent = 'Active';
+                        const button = document.querySelector(`.${isActive ? 'activate' : 'delete'}-product[data-product-id="${productId}"]`);
+                        if (button) {
+                            const row = button.closest('tr');
+                            const statusCell = row.querySelector('td:nth-child(7)');
+                            if (statusCell) {
+                                const statusBadge = statusCell.querySelector('.badge');
+                                if (statusBadge) {
+                                    statusBadge.className = `badge bg-${isActive ? 'success' : 'secondary'}`;
+                                    statusBadge.textContent = isActive ? 'Active' : 'Inactive';
+                                }
+                            }
+                            
+                            // Replace the button with the opposite action button
+                            const btnGroup = button.closest('.btn-group');
+                            if (btnGroup) {
+                                if (isActive) {
+                                    // Replace activate button with deactivate button
+                                    button.outerHTML = `
+                                        <button class="btn btn-sm btn-outline-danger delete-product" title="Mark as Inactive" data-product-id="${productId}">
+                                            <i class="fas fa-ban"></i>
+                                        </button>
+                                    `;
+                                    // Add event listener to the new button
+                                    btnGroup.querySelector('.delete-product').addEventListener('click', async function() {
+                                        const product = await fetchProduct(productId);
+                                        showProductStatusModal(product, 'deactivate');
+                                    });
+                                } else {
+                                    // Replace deactivate button with activate button
+                                    button.outerHTML = `
+                                        <button class="btn btn-sm btn-outline-success activate-product" title="Activate Product" data-product-id="${productId}">
+                                            <i class="fas fa-redo"></i>
+                                        </button>
+                                    `;
+                                    // Add event listener to the new button
+                                    btnGroup.querySelector('.activate-product').addEventListener('click', function() {
+                                        fetchProduct(productId).then(product => {
+                                            showProductStatusModal(product, 'activate');
+                                        });
+                                    });
+                                }
                             }
                         }
-                        
-                        // Replace the activate button with a delete button
-                        const btnGroup = this.closest('.btn-group');
-                        if (btnGroup) {
-                            this.outerHTML = `
-                                <button class="btn btn-sm btn-outline-danger delete-product" title="Mark as Inactive" data-product-id="${productId}">
-                                    <i class="fas fa-ban"></i>
-                                </button>
-                            `;
-                            // Add event listener to the new button
-                            btnGroup.querySelector('.delete-product').addEventListener('click', document.querySelectorAll('.delete-product')[0].onclick);
-                        }
                     } else {
-                        alert('Error: ' + (result.error || 'Failed to activate product'));
+                        showProductNotification(
+                            `Error: ${result.error || `Failed to ${isActive ? 'activate' : 'deactivate'} product`}`, 
+                            'error'
+                        );
                     }
-                })
-                .catch(error => {
+                } catch (error) {
                     console.error('Error:', error);
-                    alert('An error occurred while activating the product.');
-                });
+                    modal.hide();
+                    showProductNotification(`An error occurred while updating the product status`, 'error');
+                }
+            });
+            
+            // Function to show product notifications
+            function showProductNotification(message, type = 'success') {
+                const toast = document.getElementById('productToast');
+                const toastTitle = document.getElementById('productToastTitle');
+                const toastMessage = document.getElementById('productToastMessage');
+                
+                // Set toast content
+                toastMessage.textContent = message;
+                
+                // Set appropriate styling based on type
+                if (type === 'success') {
+                    toast.classList.remove('bg-danger', 'text-white');
+                    toast.classList.add('bg-success', 'text-white');
+                    toastTitle.textContent = 'Success';
+                } else if (type === 'error') {
+                    toast.classList.remove('bg-success', 'text-white');
+                    toast.classList.add('bg-danger', 'text-white');
+                    toastTitle.textContent = 'Error';
+                }
+                
+                // Create Bootstrap toast instance and show it
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+            }
+            
+            // Function to configure and show the product status modal
+            function showProductStatusModal(product, action) {
+                const modal = document.getElementById('productStatusModal');
+                const header = document.getElementById('productStatusModalHeader');
+                const actionText = document.getElementById('productStatusActionText');
+                const confirmMessage = document.getElementById('productStatusConfirmMessage');
+                const alert = document.getElementById('productStatusAlert');
+                const effectsList = document.getElementById('productStatusEffectsList');
+                const confirmBtn = document.getElementById('confirmStatusChangeBtn');
+                
+                // Clear previous effects
+                effectsList.innerHTML = '';
+                
+                if (action === 'deactivate') {
+                    // Configure for deactivation
+                    header.className = 'modal-header bg-danger text-white';
+                    actionText.textContent = 'Confirm Product Deactivation';
+                    confirmMessage.innerHTML = `Are you sure you want to mark <strong>${product.name}</strong> as inactive?`;
+                    alert.className = 'alert alert-warning';
+                    
+                    // Add deactivation effects
+                    const effects = [
+                        'Product will be marked as "Inactive"',
+                        'Product will not appear in the active product list',
+                        'Product will not be available for new sales orders',
+                        'Existing inventory will be maintained'
+                    ];
+                    
+                    effects.forEach(effect => {
+                        const li = document.createElement('li');
+                        li.textContent = effect;
+                        effectsList.appendChild(li);
+                    });
+                    
+                    // Set confirm button style
+                    confirmBtn.className = 'btn btn-danger';
+                    confirmBtn.textContent = 'Deactivate Product';
+                    
+                    // Set the product ID and action for the confirm button
+                    confirmBtn.dataset.productId = product.id;
+                    confirmBtn.dataset.action = 'deactivate';
+                } else {
+                    // Configure for activation
+                    header.className = 'modal-header bg-success text-white';
+                    actionText.textContent = 'Confirm Product Activation';
+                    confirmMessage.innerHTML = `Are you sure you want to activate <strong>${product.name}</strong>?`;
+                    alert.className = 'alert alert-info';
+                    
+                    // Add activation effects
+                    const effects = [
+                        'Product will be marked as "Active"',
+                        'Product will appear in the active product list',
+                        'Product will be available for new sales orders',
+                        'Existing inventory will be used for sales'
+                    ];
+                    
+                    effects.forEach(effect => {
+                        const li = document.createElement('li');
+                        li.textContent = effect;
+                        effectsList.appendChild(li);
+                    });
+                    
+                    // Set confirm button style
+                    confirmBtn.className = 'btn btn-success';
+                    confirmBtn.textContent = 'Activate Product';
+                    
+                    // Set the product ID and action for the confirm button
+                    confirmBtn.dataset.productId = product.id;
+                    confirmBtn.dataset.action = 'activate';
+                }
+                
+                // Show the modal
+                const statusModal = new bootstrap.Modal(modal);
+                statusModal.show();
             }
             
             // Add event listeners to activate buttons
@@ -796,6 +953,22 @@
         .no-data-message {
             text-align: center;
             padding: 2rem;
+        }
+
+        /* Pagination styling */
+        .pagination {
+            margin: 0;
+        }
+
+        .card-footer .pagination {
+            justify-content: flex-end;
+        }
+
+        .card-footer {
+            background-color: #2a2a2a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.75rem 1.25rem;
+            min-height: 60px; /* Ensure consistent height with or without pagination */
         }
 
         /* Image preview styles */
@@ -834,7 +1007,7 @@
 
         /* New styles for full-height layout */
         .container-fluid {
-            height: calc(100vh - 100px); /* Increased from 80px to 100px to add more bottom margin */
+            min-height: calc(100vh - 100px); /* Changed from fixed height to min-height */
             display: flex;
             flex-direction: column;
             padding-bottom: 1.5rem; /* Increased padding at bottom */
@@ -888,8 +1061,28 @@
         thead th {
             position: sticky;
             top: 0;
-            background-color: #fff;
+            background-color: #2a2a2a; /* Changed from #fff to match dark theme */
             z-index: 1;
+            color: #fff; /* Added to ensure text is visible */
+        }
+
+        /* Make pagination elements stand out better against dark background */
+        .pagination .page-link {
+            background-color: #333;
+            border-color: #444;
+            color: #fff;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: var(--accent, #FFE45C);
+            border-color: var(--accent, #FFE45C);
+            color: #333;
+        }
+        
+        .pagination .page-item.disabled .page-link {
+            background-color: #222;
+            border-color: #444;
+            color: #777;
         }
     </style>
     @endpush

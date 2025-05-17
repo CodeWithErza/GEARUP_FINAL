@@ -485,7 +485,7 @@
                         } else if (headerIndex === 5) { // Unit Price column
                             aValue = parseFloat(a.querySelector('.price-input')?.value || 0);
                             bValue = parseFloat(b.querySelector('.price-input')?.value || 0);
-                        } else if (headerIndex === 6) { // Total column - extract numeric value from ₱0.00 format
+                        } else if (headerIndex === 6) { // Total column - extract numeric value from currency format
                             aValue = parseFloat(aValue.replace(/[^\d.-]/g, '') || 0);
                             bValue = parseFloat(bValue.replace(/[^\d.-]/g, '') || 0);
                         } else if (headerIndex === 3) { // Current Stock column - convert to number

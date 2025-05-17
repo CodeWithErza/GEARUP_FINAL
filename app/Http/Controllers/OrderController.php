@@ -417,7 +417,7 @@ class OrderController extends Controller
                     'order_number' => $order->order_number,
                     'date' => $order->created_at->format('F d, Y'),
                     'items_count' => $order->items->count(),
-                    'total' => number_format($order->total, 2),
+                    'total' => $order->total,
                     'status' => $order->status,
                     'customer_name' => $order->customer->name
                 ];
@@ -434,13 +434,13 @@ class OrderController extends Controller
                 return [
                     'name' => $item->product->name,
                     'total_quantity' => $item->total_quantity,
-                    'total_sales' => number_format($item->total_sales, 2),
+                    'total_sales' => $item->total_sales,
                     'image' => $item->product->image ? asset($item->product->image) : asset('images/product_placeholder.jpg')
                 ];
             });
             
         return response()->json([
-            'today_sales' => number_format($todaySales, 2),
+            'today_sales' => $todaySales,
             'today_orders' => $todayOrders,
             'recent_orders' => $recentOrders,
             'top_products' => $topProducts
@@ -531,12 +531,12 @@ class OrderController extends Controller
                 'created_at' => $order->created_at,
                 'updated_at' => $order->updated_at,
                 'status' => $order->status,
-                'subtotal' => number_format($order->subtotal, 2),
-                'tax' => number_format($order->tax, 2),
-                'total' => number_format($order->total, 2),
+                'subtotal' => $order->subtotal,
+                'tax' => $order->tax,
+                'total' => $order->total,
                 'payment_method' => $order->payment_method,
-                'amount_received' => number_format($order->amount_received, 2),
-                'change_amount' => number_format($order->amount_received - $order->total, 2),
+                'amount_received' => $order->amount_received,
+                'change_amount' => $order->amount_received - $order->total,
                 'customer' => [
                     'name' => $order->customer->name,
                     'email' => $order->customer->email,
@@ -551,8 +551,8 @@ class OrderController extends Controller
                             'sku' => $item->product->sku,
                         ],
                         'quantity' => $item->quantity,
-                        'price' => number_format($item->price, 2),
-                        'subtotal' => number_format($item->subtotal, 2),
+                        'price' => $item->price,
+                        'subtotal' => $item->subtotal,
                     ];
                 }),
             ]

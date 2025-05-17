@@ -164,48 +164,48 @@
             <h1 class="login-title">Reset Password</h1>
             <p class="login-subtitle">Create a new password for your account</p>
             
-            <form method="POST" action="{{ route('password.store') }}">
-              @csrf
-              
-              <!-- Password Reset Token -->
-              <input type="hidden" name="token" value="{{ $request->route('token') }}">
-              
-              <!-- Email Address -->
+    <form method="POST" action="{{ route('password.store') }}">
+        @csrf
+
+        <!-- Password Reset Token -->
+        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+
+        <!-- Email Address -->
               <div class="input-group">
                 <i class="fas fa-envelope input-icon"></i>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{ old('email', $request->email) }}" required autofocus>
-              </div>
+        </div>
               
               @error('email')
                 <div class="alert alert-danger">
                   {{ $message }}
                 </div>
               @enderror
-              
-              <!-- Password -->
+
+        <!-- Password -->
               <div class="input-group">
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" class="form-control" id="password" name="password" placeholder="New Password" required>
                 <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password')">
                   <i class="fas fa-eye"></i>
                 </button>
-              </div>
+        </div>
               
               @error('password')
                 <div class="alert alert-danger">
                   {{ $message }}
                 </div>
               @enderror
-              
-              <!-- Confirm Password -->
+
+        <!-- Confirm Password -->
               <div class="input-group">
                 <i class="fas fa-lock input-icon"></i>
                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required>
                 <button type="button" class="password-toggle" onclick="togglePasswordVisibility('password_confirmation')">
                   <i class="fas fa-eye"></i>
                 </button>
-              </div>
-              
+        </div>
+
               @error('password_confirmation')
                 <div class="alert alert-danger">
                   {{ $message }}

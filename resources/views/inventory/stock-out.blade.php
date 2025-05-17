@@ -35,7 +35,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Date</label>
-                                    <input type="date" class="form-control" id="stockOutDate" name="date" value="{{ date('Y-m-d') }}">
+                                    <input type="text" class="form-control datepicker" id="stockOutDate" name="date" value="{{ date('Y-m-d') }}" placeholder="Select date">
                                 </div>
                             </div>
 
@@ -57,11 +57,11 @@
                                 <table class="table table-hover align-middle">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Product</th>
-                                            <th>SKU</th>
-                                            <th>Current Stock</th>
-                                            <th>Quantity</th>
-                                            <th>Reason</th>
+                                            <th class="sortable">Product <span class="sort-icon"></span></th>
+                                            <th class="sortable">SKU <span class="sort-icon"></span></th>
+                                            <th class="sortable">Current Stock <span class="sort-icon"></span></th>
+                                            <th class="sortable">Quantity <span class="sort-icon"></span></th>
+                                            <th class="sortable">Reason <span class="sort-icon"></span></th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -184,10 +184,10 @@
                         <table class="table table-hover">
                             <thead class="bg-dark text-white">
                                 <tr>
-                                    <th>PRODUCT</th>
-                                    <th>SKU</th>
-                                    <th>CATEGORY</th>
-                                    <th>CURRENT STOCK</th>
+                                    <th class="sortable">PRODUCT <span class="sort-icon"></span></th>
+                                    <th class="sortable">SKU <span class="sort-icon"></span></th>
+                                    <th class="sortable">CATEGORY <span class="sort-icon"></span></th>
+                                    <th class="sortable">CURRENT STOCK <span class="sort-icon"></span></th>
                                     <th>ACTIONS</th>
                                 </tr>
                             </thead>
@@ -205,6 +205,8 @@
     </div>
 
     @push('scripts')
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const stockOutForm = document.getElementById('stockOutForm');
@@ -216,6 +218,76 @@
             const modalProductSearch = document.getElementById('modalProductSearch');
             const productModalResults = document.getElementById('productModalResults');
             const productModal = new bootstrap.Modal(document.getElementById('productSelectionModal'));
+
+            // Table sorting functionality
+            document.querySelectorAll('th.sortable').forEach(headerCell => {
+                headerCell.addEventListener('click', function() {
+                    const table = this.closest('table');
+                    const tbody = table.querySelector('tbody');
+                    const rows = Array.from(tbody.querySelectorAll('tr:not(#noItemsMessage)'));
+                    const headerIndex = Array.from(this.parentNode.children).indexOf(this);
+                    
+                    // Get current sort direction (default is ascending)
+                    const currentDirection = this.classList.contains('asc') ? 'desc' : 'asc';
+                    
+                    // Reset all header classes
+                    table.querySelectorAll('th.sortable').forEach(th => {
+                        th.classList.remove('asc', 'desc');
+                    });
+                    
+                    // Set new direction class
+                    this.classList.add(currentDirection);
+                    
+                    // Sort rows
+                    const sortedRows = rows.sort((a, b) => {
+                        // Skip if no cells in row
+                        if (!a.children[headerIndex] || !b.children[headerIndex]) return 0;
+                        
+                        let aValue = a.children[headerIndex].textContent.trim();
+                        let bValue = b.children[headerIndex].textContent.trim();
+                        
+                        // Special handling for quantity inputs
+                        if (headerIndex === 3) { // Quantity column
+                            aValue = parseFloat(a.querySelector('.new-count')?.value || 0);
+                            bValue = parseFloat(b.querySelector('.new-count')?.value || 0);
+                        } else if (headerIndex === 2) { // Current Stock column
+                            aValue = parseFloat(aValue || 0);
+                            bValue = parseFloat(bValue || 0);
+                        }
+                        
+                        // If numeric values, compare as numbers
+                        if (!isNaN(aValue) && !isNaN(bValue)) {
+                            return currentDirection === 'asc' ? aValue - bValue : bValue - aValue;
+                        }
+                        
+                        // Otherwise compare as strings
+                        return currentDirection === 'asc' 
+                            ? aValue.localeCompare(bValue) 
+                            : bValue.localeCompare(aValue);
+                    });
+                    
+                    // Remove all rows and append in sorted order
+                    rows.forEach(row => row.remove());
+                    
+                    // Add back no items message if necessary
+                    if (sortedRows.length === 0 && noItemsMessage) {
+                        noItemsMessage.style.display = '';
+                    } else if (noItemsMessage) {
+                        noItemsMessage.style.display = 'none';
+                    }
+                    
+                    sortedRows.forEach(row => tbody.appendChild(row));
+                });
+            });
+            
+            // Initialize flatpickr for date inputs
+            flatpickr(".datepicker", {
+                altInput: true,
+                altFormat: "F j, Y",
+                dateFormat: "Y-m-d",
+                defaultDate: "{{ date('Y-m-d') }}",
+                theme: "dark"
+            });
 
             // Handle form submission
             stockOutForm.addEventListener('submit', async function(e) {
@@ -485,7 +557,95 @@
     @endpush
 
     @push('styles')
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
     <style>
+        /* Custom styling for the flatpickr calendar */
+        .flatpickr-calendar {
+            background: #2a2a2a !important;
+            color: #ffffff !important;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4) !important;
+            border: 1px solid #393939 !important;
+        }
+        .flatpickr-day {
+            color: #e0e0e0 !important;
+        }
+        .flatpickr-day.selected {
+            background: #FFE45C !important;
+            border-color: #FFE45C !important;
+            color: #111111 !important;
+        }
+        .flatpickr-day:hover {
+            background: rgba(255, 228, 92, 0.2) !important;
+        }
+        .flatpickr-day.today {
+            border-color: #FFE45C !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            color: #e0e0e0 !important;
+        }
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            color: #e0e0e0 !important;
+        }
+        .flatpickr-time input, .flatpickr-time .flatpickr-time-separator, .flatpickr-time .flatpickr-am-pm {
+            color: #e0e0e0 !important;
+        }
+        
+        /* Sortable Table Headers */
+        th.sortable {
+            cursor: pointer;
+            position: relative;
+            padding-right: 25px; /* Increased padding for sort icons */
+            padding-top: 12px;   /* Increased top padding */
+            padding-bottom: 12px; /* Increased bottom padding */
+            height: 50px;       /* Set a fixed height for consistent header size */
+            vertical-align: middle;
+        }
+        
+        .sort-icon {
+            font-size: 12px;    /* Increased font size for better visibility */
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            display: flex;
+            flex-direction: column;
+            line-height: 0.7;   /* Reduced line height to create proper spacing */
+        }
+        
+        .sort-icon:before {
+            content: "▲";       /* Up triangle */
+            display: block;
+            margin-bottom: 3px; /* Add space between triangles */
+        }
+        
+        .sort-icon:after {
+            content: "▼";       /* Down triangle */
+            display: block;
+        }
+        
+        th.sortable:hover .sort-icon {
+            color: #FFE45C;
+        }
+        
+        th.sortable.asc .sort-icon:before {
+            color: #FFE45C;    /* Highlight up triangle when sorting ascending */
+        }
+        
+        th.sortable.asc .sort-icon:after {
+            color: #999;       /* Keep down triangle muted when sorting ascending */
+        }
+        
+        th.sortable.desc .sort-icon:before {
+            color: #999;       /* Keep up triangle muted when sorting descending */
+        }
+        
+        th.sortable.desc .sort-icon:after {
+            color: #FFE45C;    /* Highlight down triangle when sorting descending */
+        }
+        
         /* Product Selection Modal Styles */
         #productSelectionModal .modal-content {
             background-color: #f8f9fa;

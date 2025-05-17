@@ -247,7 +247,7 @@ class ReportController extends Controller
                     return [
                         'order_id' => $order->order_number,
                         'customer_name' => $order->customer ? $order->customer->name : 'N/A',
-                        'date' => $order->created_at->format('M d, Y'),
+                        'date' => $order->created_at->format('F d, Y'),
                         'time' => $order->created_at->format('h:i A'),
                         'total_items' => $order->items ? $order->items->count() : 0,
                         'total_amount' => $order->total ?? 0,

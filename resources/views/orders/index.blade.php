@@ -71,8 +71,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                            </div>
+                        </div>
 
             <!-- Right Column - Order Details -->
             <div class="col-lg-4">
@@ -111,7 +111,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+            </div>
 
                         <!-- Customer Information -->
                         <div class="mb-3">
@@ -209,15 +209,62 @@
                                 <span class="fw-bold">Total:</span>
                                 <span class="fw-bold text-success fs-5" id="totalAmount">₱0</span>
                             </div>
+                            
+                            <!-- Payment Method Selection -->
+                            <div class="mb-3">
+                                <h6 class="fw-bold mb-2">Payment Method</h6>
+                                <select class="form-select" id="paymentMethod" data-bs-toggle="tooltip" title="Select how the customer will pay">
+                                    <option value="cash">Cash</option>
+                                    <option value="gcash">GCash</option>
+                                    <option value="paymaya">PayMaya</option>
+                                    <option value="bank_transfer">Bank Transfer</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Cash Payment Details -->
+                            <div id="cashPaymentDetails">
+                                <div class="mb-3">
+                                    <label for="amountReceived" class="form-label small">Amount Received</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" class="form-control" id="amountReceived" placeholder="Enter amount">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <span>Change:</span>
+                                    <span id="changeAmount" class="fw-bold">₱0</span>
+                                </div>
+                            </div>
+                            
+                            <!-- E-wallet/Bank Payment Details -->
+                            <div id="ewalletPaymentDetails" style="display: none;">
+                                <div class="mb-3">
+                                    <label for="ewalletReference" class="form-label small">Reference Number</label>
+                                    <input type="text" class="form-control" id="ewalletReference" placeholder="Enter reference number">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ewalletAmount" class="form-label small">Amount Paid</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" class="form-control" id="ewalletAmount" placeholder="Enter amount">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Order Notes -->
+                            <div class="mb-3">
+                                <label for="orderNotes" class="form-label small">Order Notes</label>
+                                <textarea class="form-control" id="orderNotes" rows="2" placeholder="Add notes about this order (optional)"></textarea>
+                            </div>
+                            
                             <div class="d-grid">
-                                <button type="button" id="completeOrderBtn" class="btn btn-accent" data-bs-toggle="tooltip" title="Process and save this order">
+                                <button type="button" id="completeOrder" class="btn btn-accent" data-bs-toggle="tooltip" title="Process and save this order">
                                     <i class="fas fa-check-circle me-1"></i>
                                     Complete Order
-                                </button>
+                            </button>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                                    </div>
+                                </div>
             </div>
         </div>
     </div>

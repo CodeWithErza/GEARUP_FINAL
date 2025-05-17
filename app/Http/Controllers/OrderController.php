@@ -415,7 +415,7 @@ class OrderController extends Controller
             ->map(function ($order) {
                 return [
                     'order_number' => $order->order_number,
-                    'date' => $order->created_at->format('M d, Y'),
+                    'date' => $order->created_at->format('F d, Y'),
                     'items_count' => $order->items->count(),
                     'total' => number_format($order->total, 2),
                     'status' => $order->status,
@@ -531,12 +531,12 @@ class OrderController extends Controller
                 'created_at' => $order->created_at,
                 'updated_at' => $order->updated_at,
                 'status' => $order->status,
-                'subtotal' => $order->subtotal,
-                'tax' => $order->tax,
-                'total' => $order->total,
+                'subtotal' => number_format($order->subtotal, 2),
+                'tax' => number_format($order->tax, 2),
+                'total' => number_format($order->total, 2),
                 'payment_method' => $order->payment_method,
-                'amount_received' => $order->amount_received,
-                'change_amount' => $order->amount_received - $order->total,
+                'amount_received' => number_format($order->amount_received, 2),
+                'change_amount' => number_format($order->amount_received - $order->total, 2),
                 'customer' => [
                     'name' => $order->customer->name,
                     'email' => $order->customer->email,
@@ -551,8 +551,8 @@ class OrderController extends Controller
                             'sku' => $item->product->sku,
                         ],
                         'quantity' => $item->quantity,
-                        'price' => $item->price,
-                        'subtotal' => $item->subtotal,
+                        'price' => number_format($item->price, 2),
+                        'subtotal' => number_format($item->subtotal, 2),
                     ];
                 }),
             ]

@@ -56,14 +56,14 @@
                                             <div class="d-flex align-items-center">
                                                 <div>
                                                     <strong>{{ $supplier->name }}</strong>
-                                                    <div class="small text-muted">Since {{ $supplier->created_at->format('M Y') }}</div>
+                                                    <div class="small text-muted">Since {{ $supplier->created_at->format('F Y') }}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td>{{ $supplier->contact_person }}</td>
                                         <td>{{ $supplier->phone }}</td>
                                         <td>{{ $supplier->email }}</td>
-                                        <td>{{ $supplier->product_count ?? 0 }}</td>
+                                        <td>{{ number_format($supplier->product_count ?? 0) }}</td>
                                         <td><span class="badge bg-{{ $supplier->status === 'active' ? 'success' : ($supplier->status === 'on_hold' ? 'warning' : 'secondary') }}">{{ $supplier->status === 'on_hold' ? 'On Hold' : ucfirst($supplier->status) }}</span></td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
@@ -531,14 +531,14 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <strong>${supplier.name}</strong>
-                                            <div class="small text-muted">Since ${new Date(supplier.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</div>
+                                            <div class="small text-muted">Since ${new Date(supplier.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>${supplier.contact_person}</td>
                                 <td>${supplier.phone}</td>
                                 <td>${supplier.email}</td>
-                                <td>${supplier.product_count || 0}</td>
+                                <td>${(supplier.product_count || 0).toLocaleString()}</td>
                                 <td><span class="badge bg-${supplier.status === 'active' ? 'success' : (supplier.status === 'on_hold' ? 'warning' : 'secondary')}">${supplier.status === 'on_hold' ? 'On Hold' : supplier.status.charAt(0).toUpperCase() + supplier.status.slice(1)}</span></td>
                                 <td>
                                     <div class="btn-group btn-group-sm">
@@ -690,7 +690,7 @@
                     
                     // Update product count
                     if (businessInfo[7]) {
-                        businessInfo[7].textContent = supplier.product_count || 0;
+                        businessInfo[7].textContent = (supplier.product_count || 0).toLocaleString();
                     }
                     
                     // Update notes

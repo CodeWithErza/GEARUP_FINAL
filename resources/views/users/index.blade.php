@@ -28,29 +28,29 @@
         <!-- Header with Search and Add User Button -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-body" style="color: #ffffff;">
                         <form action="{{ route('users.index') }}" method="GET" class="row g-3">
                             <div class="col-md-4">
-                                <input type="text" class="form-control" name="search" placeholder="Search users..." value="{{ request('search') }}">
+                                <input type="text" class="form-control" name="search" placeholder="Search users..." value="{{ request('search') }}" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                             </div>
                             <div class="col-md-3">
-                                <select class="form-select" name="role">
+                                <select class="form-select" name="role" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     <option value="">All Roles</option>
                                     <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                                     <option value="staff" {{ request('role') === 'staff' ? 'selected' : '' }}>Staff</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn" style="background-color: #FFE45C; color: #222222; font-weight: 500;">
                                     <i class="fas fa-search me-2"></i>Search
                                 </button>
-                                <a href="{{ route('users.index') }}" class="btn btn-secondary">
+                                <a href="{{ route('users.index') }}" class="btn btn-outline-secondary" style="color: #999999; border-color: #555555;">
                                     <i class="fas fa-sync-alt me-2"></i>Reset
                                 </a>
                             </div>
                             <div class="col-md-2 text-end">
-                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                <button type="button" class="btn" style="background-color: #FFE45C; color: #222222; font-weight: 500;" data-bs-toggle="modal" data-bs-target="#addUserModal">
                                     <i class="fas fa-plus me-2"></i>Add User
                                 </button>
                             </div>
@@ -61,10 +61,10 @@
         </div>
 
         <!-- Users Table -->
-        <div class="card">
-            <div class="card-body">
+        <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+            <div class="card-body" style="color: #ffffff;">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover" style="color: #e0e0e0;">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -94,18 +94,18 @@
                                     </td>
                                     <td>
                                         @if($user->birthdate)
-                                            {{ str_replace('-', '/', $user->birthdate) }}
+                                            {{ \DateTime::createFromFormat('m-d-Y', $user->birthdate)->format('F d, Y') }}
                                         @else
                                             Not set
                                         @endif
                                     </td>
                                     <td>{{ $user->last_login_at ? $user->last_login_at->diffForHumans() : 'Never' }}</td>
-                                    <td>{{ $user->created_at->format('M d, Y') }}</td>
+                                    <td>{{ $user->created_at->format('F d, Y') }}</td>
                                     <td>
-                                        <button class="btn btn-sm btn-info me-2" title="Edit" onclick="editUser({{ $user->id }})">
+                                        <button class="btn btn-sm" style="background-color: #FFE45C; color: #222222;" title="Edit" onclick="editUser({{ $user->id }})">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-sm btn-danger" title="Delete" onclick="deleteUser({{ $user->id }})">
+                                        <button class="btn btn-sm btn-outline-danger" title="Delete" onclick="deleteUser({{ $user->id }})">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
@@ -129,9 +129,9 @@
         <!-- Add User Modal -->
         <div class="modal fade" id="addUserModal" tabindex="-1">
             <div class="modal-dialog">
-                <div class="modal-content bg-light">
-                    <div class="modal-header bg-dark text-white">
-                        <h5 class="modal-title"><i class="fas fa-user-plus me-2"></i>Add New User</h5>
+                <div class="modal-content" style="background-color: #2a2a2a; color: #ffffff;">
+                    <div class="modal-header" style="background-color: #2a2a2a; border-bottom-color: #393939;">
+                        <h5 class="modal-title" style="color: #FFE45C;"><i class="fas fa-user-plus me-2"></i>Add New User</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <!-- Add Flatpickr CSS in the header -->
@@ -144,57 +144,60 @@
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Name</label>
-                                    <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" name="name" required>
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Name</label>
+                                    <input type="text" class="form-control" name="name" required style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Email</label>
-                                    <input type="email" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" name="email" required>
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Email</label>
+                                    <input type="email" class="form-control" name="email" required style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Password</label>
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Password</label>
                                     <input type="password" 
-                                           class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" 
+                                           class="form-control" 
                                            name="password" 
                                            id="password" 
                                            required
-                                           oninput="validatePassword(this)">
+                                           oninput="validatePassword(this)"
+                                           style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     <small class="form-text text-muted" id="password_help" style="display: none;">Leave blank to keep current password when editing.</small>
                                     <small class="form-text text-danger" id="password_error" style="display: none;">Password must be at least 8 characters</small>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Confirm Password</label>
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Confirm Password</label>
                                     <input type="password" 
-                                           class="form-control bg-white text-dark border border-secondary-subtle shadow-sm" 
+                                           class="form-control" 
                                            name="password_confirmation" 
                                            id="password_confirmation"
                                            required
-                                           oninput="validatePasswordMatch()">
+                                           oninput="validatePasswordMatch()"
+                                           style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     <small class="form-text text-danger" id="confirm_error" style="display: none;">Passwords don't match</small>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Role</label>
-                                    <select class="form-select bg-white text-dark border border-secondary-subtle shadow-sm" name="role" required>
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Role</label>
+                                    <select class="form-select" name="role" required style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                         <option value="">Select Role</option>
                                         <option value="admin">Admin</option>
                                         <option value="staff">Staff</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Status</label>
-                                    <select class="form-select bg-white text-dark border border-secondary-subtle shadow-sm" name="is_active">
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Status</label>
+                                    <select class="form-select" name="is_active" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                         <option value="1" selected>Active</option>
                                         <option value="0">Inactive</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label mb-1 text-dark">Birthdate</label>
+                                    <label class="form-label mb-1" style="color: #e0e0e0;">Birthdate</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-white text-dark border border-secondary-subtle shadow-sm datepicker" 
+                                        <input type="text" class="form-control datepicker" 
                                                name="birthdate" 
                                                placeholder="MM/DD/YYYY"
-                                               autocomplete="off">
-                                        <span class="input-group-text bg-white border border-secondary-subtle">
+                                               autocomplete="off"
+                                               style="background-color: #333333; color: #ffffff; border-color: #444444;">
+                                        <span class="input-group-text" style="background-color: #444444; color: #ffffff; border-color: #444444;">
                                             <i class="fas fa-calendar"></i>
                                         </span>
                                     </div>
@@ -202,9 +205,9 @@
                             </div>
                         </form>
                     </div>
-                    <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" form="addUserForm" class="btn btn-primary">Save User</button>
+                    <div class="modal-footer" style="background-color: #2a2a2a; border-top-color: #393939;">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="color: #999999; border-color: #555555;">Cancel</button>
+                        <button type="submit" form="addUserForm" class="btn" style="background-color: #FFE45C; color: #222222; font-weight: 500;">Save User</button>
                     </div>
                 </div>
             </div>
@@ -221,12 +224,12 @@
             const dateConfig = {
                 dateFormat: "m/d/Y",
                 allowInput: true,
-                altFormat: "m/d/Y",
+                altFormat: "F d, Y",
                 altInput: true,
                 altInputClass: "form-control bg-white text-dark border border-secondary-subtle shadow-sm",
                 maxDate: "today",
                 yearRange: "1900:2024",
-                placeholder: "MM/DD/YYYY"
+                placeholder: "Month DD, YYYY"
             };
             
             // Initialize the date picker
@@ -261,12 +264,13 @@
                     // Set status
                     form.querySelector('select[name="is_active"]').value = data.is_active ? '1' : '0';
                     
-                    // Set birthdate - convert from MM-DD-YYYY to MM/DD/YYYY
+                    // Set birthdate - ensure proper formatting
                     const birthdateInput = form.querySelector('input[name="birthdate"]');
                     if (data.birthdate) {
                         // Update the flatpickr instance with the new date
                         const fp = birthdateInput._flatpickr;
                         if (fp) {
+                            // Convert to date object for consistent formatting
                             fp.setDate(data.birthdate.replace(/-/g, '/'), true);
                         }
                     } else {

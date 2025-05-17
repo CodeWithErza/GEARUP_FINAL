@@ -101,8 +101,8 @@
         function updateDateTime() {
             const now = new Date();
             
-            // Format date: Jun 10, 2024
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            // Format date: June 10, 2024
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const month = monthNames[now.getMonth()];
             const day = now.getDate();
             const year = now.getFullYear();

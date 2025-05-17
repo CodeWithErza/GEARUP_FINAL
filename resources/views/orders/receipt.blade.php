@@ -135,7 +135,7 @@
         
         <div class="info">
             <p><strong>Order #:</strong> {{ $order->order_number }}</p>
-            <p><strong>Date:</strong> {{ $order->created_at->format('M d, Y h:i A') }}</p>
+            <p><strong>Date:</strong> {{ $order->created_at->format('F d, Y h:i A') }}</p>
             <p><strong>Customer:</strong> {{ $order->customer->name }}</p>
             @if($order->customer->phone)
             <p><strong>Phone:</strong> {{ $order->customer->phone }}</p>

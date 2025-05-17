@@ -3,14 +3,14 @@
         <!-- Filters and Export Options -->
         <div class="row mb-3">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-body" style="color: #ffffff;">
                         <form class="row g-3" method="GET">
                             <div class="col-md-4">
                                 <label for="date-range" class="form-label">
                                     Date Range
                                 </label>
-                                <select class="form-select" id="date-range" name="date_range">
+                                <select class="form-select" id="date-range" name="date_range" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     <option value="today">Today</option>
                                     <option value="yesterday">Yesterday</option>
                                     <option value="this_week">This Week</option>
@@ -25,7 +25,7 @@
                                 <label for="product-category" class="form-label">
                                     Product Category
                                 </label>
-                                <select class="form-select" id="product-category" name="product_category">
+                                <select class="form-select" id="product-category" name="product_category" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     <option value="all" selected>All Categories</option>
                                     <option value="interior">Interior</option>
                                     <option value="exterior">Exterior</option>
@@ -45,14 +45,14 @@
                                             Start Date
                                             <i class="fas fa-info-circle ms-1 tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="First day to include in the report"></i>
                                         </label>
-                                        <input type="date" class="form-control" id="start_date" name="start_date">
+                                        <input type="date" class="form-control" id="start_date" name="start_date" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="end_date" class="form-label">
                                             End Date
                                             <i class="fas fa-info-circle ms-1 tooltip-icon" data-bs-toggle="tooltip" data-bs-placement="top" title="Last day to include in the report"></i>
                                         </label>
-                                        <input type="date" class="form-control" id="end_date" name="end_date">
+                                        <input type="date" class="form-control" id="end_date" name="end_date" style="background-color: #333333; color: #ffffff; border-color: #444444;">
                                     </div>
                                 </div>
                             </div>
@@ -61,17 +61,17 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-body" style="color: #ffffff;">
                         <label class="form-label">Export Options</label>
                         <div class="d-flex gap-2">
-                            <a href="#" id="export-pdf" class="btn btn-danger flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Export current report data as PDF document">
+                            <a href="#" id="export-pdf" class="btn flex-grow-1" style="background-color: #FFE45C; color: #222222; font-weight: 500;" data-bs-toggle="tooltip" data-bs-placement="top" title="Export current report data as PDF document">
                                 <i class="fas fa-file-pdf me-1"></i> PDF
                             </a>
-                            <a href="#" id="export-excel" class="btn btn-success flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Export current report data as Excel spreadsheet">
+                            <a href="#" id="export-excel" class="btn flex-grow-1" style="background-color: #FFE45C; color: #222222; font-weight: 500;" data-bs-toggle="tooltip" data-bs-placement="top" title="Export current report data as Excel spreadsheet">
                                 <i class="fas fa-file-excel me-1"></i> Excel
                             </a>
-                            <a href="#" onclick="window.print();" class="btn btn-secondary flex-grow-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Print current report view">
+                            <a href="#" onclick="window.print();" class="btn flex-grow-1" style="background-color: #555555; color: #ffffff;" data-bs-toggle="tooltip" data-bs-placement="top" title="Print current report view">
                                 <i class="fas fa-print me-1"></i> Print
                             </a>
                         </div>
@@ -83,56 +83,56 @@
         <!-- Sales Summary Cards -->
         <div class="row mb-3">
             <div class="col-md-3">
-                <div class="card bg-dark text-white">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
                     <div class="card-body">
                         <h5 class="card-title" style="color: #FFE45C;">
                             Total Sales
                             <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="The sum of all sales for the selected period"></i>
                         </h5>
                         <h2 class="card-text fw-bold text-white" id="total-sales-card">₱0.00</h2>
-                        <p class="card-text text-secondary small" id="total-sales-change" style="margin-bottom: 0;">
+                        <p class="card-text small" id="total-sales-change" style="margin-bottom: 0; color: #999999;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card bg-dark text-white">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
                     <div class="card-body">
                         <h5 class="card-title" style="color: #FFE45C;">
                             Total Orders
                             <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Number of completed orders in the selected period"></i>
                         </h5>
                         <h2 class="card-text fw-bold text-white" id="total-orders-card">0</h2>
-                        <p class="card-text text-secondary small" id="total-orders-change" style="margin-bottom: 0;">
+                        <p class="card-text small" id="total-orders-change" style="margin-bottom: 0; color: #999999;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card bg-dark text-white">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
                     <div class="card-body">
                         <h5 class="card-title" style="color: #FFE45C;">
                             Average Order Value
                             <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Average amount spent per order"></i>
                         </h5>
                         <h2 class="card-text fw-bold text-white" id="avg-order-value-card">₱0.00</h2>
-                        <p class="card-text text-secondary small" id="avg-order-value-change" style="margin-bottom: 0;">
+                        <p class="card-text small" id="avg-order-value-change" style="margin-bottom: 0; color: #999999;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card bg-dark text-white">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
                     <div class="card-body">
                         <h5 class="card-title" style="color: #FFE45C;">
                             Total Products Sold
                             <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Total quantity of products sold in the selected period"></i>
                         </h5>
                         <h2 class="card-text fw-bold text-white" id="total-products-card">0</h2>
-                        <p class="card-text text-secondary small" id="total-products-change" style="margin-bottom: 0;">
+                        <p class="card-text small" id="total-products-change" style="margin-bottom: 0; color: #999999;">
                             <i class="fas fa-arrow-up"></i> 0% from last period
                         </p>
                     </div>
@@ -144,8 +144,8 @@
         <div class="row mb-3">
             <!-- Total Sales Table -->
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #2a2a2a; color: #ffffff; border-bottom-color: #393939;">
                         <h5 class="card-title mb-0">
                             Total Sales by Category
                             <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Breakdown of sales by product category"></i>
@@ -162,7 +162,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: #ffffff;">
                         <div class="table-responsive">
                             <table class="table table-hover" id="categorySalesTable">
                                 <thead>
@@ -196,17 +196,17 @@
 
             <!-- Recent Sales Table -->
             <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #2a2a2a; color: #ffffff; border-bottom-color: #393939;">
                         <h5 class="card-title mb-0">Recent Sales</h5>
                         <div>
                             <button class="btn btn-sm btn-outline-secondary me-2" onclick="loadRecentSales()">
                                 <i class="fas fa-sync-alt"></i> Refresh
                             </button>
-                            <a href="{{ route('orders.history') }}" class="btn btn-sm btn-accent">View All</a>
+                            <a href="{{ route('orders.history') }}" class="btn btn-sm" style="background-color: #FFE45C; color: #212529;">View All</a>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: #ffffff;">
                         <div class="table-responsive">
                             <table class="table table-hover table-sm">
                                 <thead>
@@ -233,21 +233,21 @@
         <!-- Chart Section -->
         <div class="row mb-3">
             <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header bg-white">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-header" style="background-color: #2a2a2a; color: #ffffff; border-bottom-color: #393939;">
                         <h5 class="card-title mb-0">Sales Trend</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: #ffffff;">
                         <canvas id="sales-trend-chart" height="300"></canvas>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-white">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-header" style="background-color: #2a2a2a; color: #ffffff; border-bottom-color: #393939;">
                         <h5 class="card-title mb-0">Sales by Category</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: #ffffff;">
                         <canvas id="category-pie-chart" height="300"></canvas>
                     </div>
                 </div>
@@ -257,8 +257,8 @@
         <!-- Sales Table -->
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div class="card" style="background-color: #2a2a2a; border-color: #393939;">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #2a2a2a; color: #ffffff; border-bottom-color: #393939;">
                         <h5 class="card-title mb-0">
                             Sales Details
                             <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" title="Detailed breakdown of sales by product"></i>
@@ -275,11 +275,11 @@
                                 <option value="custom">Custom Range</option>
                             </select>
                             <form method="GET" class="mb-0 d-flex gap-2">
-                                <input type="search" class="form-control form-control-sm" id="sales-search" name="search" placeholder="Search products or categories...">
+                                <input type="search" class="form-control form-control-sm" id="sales-search" name="search" placeholder="Search products or categories..." style="background-color: #333333; color: #ffffff; border-color: #444444;">
                             </form>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: #ffffff;">
                         <!-- Custom Date Range for Sales Details (hidden by default) -->
                         <div class="row mb-3 sales-details-custom-date" style="display: none;">
                             <div class="col-md-5">
@@ -407,6 +407,50 @@
             outline: none;
             box-shadow: none;
         }
+        
+        /* Custom table styles for dark theme */
+        .table {
+            color: #e0e0e0;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(255, 228, 92, 0.05);
+        }
+        
+        .table thead th {
+            border-bottom: 2px solid #444;
+            border-top: none;
+            color: #ffffff;
+            font-weight: 600;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .table tbody td, .table tbody th {
+            border-top: 1px solid #444;
+            padding: 0.75rem;
+        }
+        
+        .table-light, .table-light>td, .table-light>th {
+            background-color: #333;
+        }
+        
+        .pagination .page-link {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: #FFF;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: #FFE45C;
+            border-color: #FFE45C;
+            color: #333;
+        }
+        
+        .pagination .page-item.disabled .page-link {
+            background-color: #333;
+            border-color: #444;
+            color: #777;
+        }
     </style>
     @endpush
 
@@ -424,16 +468,18 @@
         function formatCurrency(amount) {
             return new Intl.NumberFormat('en-PH', {
                 style: 'currency',
-                currency: 'PHP'
+                currency: 'PHP',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             }).format(amount);
         }
 
         // Function to format date
         function formatDate(dateString) {
-            return new Date(dateString).toLocaleDateString('en-PH', {
+            return new Date(dateString).toLocaleDateString('en-US', {
                 year: 'numeric',
-                month: 'short',
-                day: '2-digit'
+                month: 'long',
+                day: 'numeric'
             });
         }
 
@@ -690,16 +736,11 @@
                     }
 
                     tbody.innerHTML = data.recent_sales.map(sale => {
-                        // Format date to MM/DD/YYYY
-                        const dateParts = sale.date.split('-');
-                        const formattedDate = dateParts.length === 3 ? 
-                            `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}` : sale.date;
-                        
                         return `
                             <tr class="sale-row" style="cursor:pointer" onclick='showOrderItems(${JSON.stringify(sale.items)})'>
                                 <td class="small">${sale.order_id}</td>
                                 <td class="small">${sale.customer_name}</td>
-                                <td class="small">${formattedDate}</td>
+                                <td class="small">${formatDate(sale.date)}</td>
                                 <td class="text-end small">₱${parseFloat(sale.total_amount).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                                 <td>
                                     <span class="badge text-bg-${sale.status === 'completed' ? 'success' : sale.status === 'cancelled' ? 'danger' : 'info'} small">

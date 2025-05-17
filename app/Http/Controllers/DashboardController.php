@@ -32,7 +32,7 @@ class DashboardController extends Controller
                 return [
                     'name' => $item->product->name,
                     'total_quantity' => $item->total_quantity,
-                    'total_sales' => $item->total_sales
+                    'total_sales' => number_format($item->total_sales, 2)
                 ];
             });
 
@@ -45,7 +45,7 @@ class DashboardController extends Controller
                     'id' => $order->id,
                     'order_number' => $order->order_number,
                     'customer_name' => $order->customer->name,
-                    'date' => $order->created_at->format('M d, Y'),
+                    'date' => $order->created_at->format('F d, Y'),
                     'total' => number_format($order->total, 2),
                     'status' => $order->status,
                     'items_count' => $order->items->count()
@@ -76,7 +76,7 @@ class DashboardController extends Controller
             ->map(function ($order) {
                 return [
                     'order_number' => $order->order_number,
-                    'date' => $order->created_at->format('M d, Y'),
+                    'date' => $order->created_at->format('F d, Y'),
                     'items_count' => $order->items->count(),
                     'total' => number_format($order->total, 2),
                     'status' => $order->status
@@ -94,7 +94,7 @@ class DashboardController extends Controller
                 return [
                     'name' => $item->product->name,
                     'total_quantity' => $item->total_quantity,
-                    'total_sales' => $item->total_sales
+                    'total_sales' => number_format($item->total_sales, 2)
                 ];
             });
             

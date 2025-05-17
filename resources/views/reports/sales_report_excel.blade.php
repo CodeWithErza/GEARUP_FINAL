@@ -7,7 +7,7 @@
             <th colspan="5" style="text-align:center;">Generated on: {{ now()->format('F d, Y h:i A') }}</th>
         </tr>
         <tr>
-            <th colspan="5" style="text-align:center;">Date Range: {{ ucfirst($dateRange) }} ({{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }})</th>
+            <th colspan="5" style="text-align:center;">Date Range: {{ ucfirst($dateRange) }} ({{ $startDate->format('F d, Y') }} - {{ $endDate->format('F d, Y') }})</th>
         </tr>
         <tr>
             <th colspan="5" style="text-align:center;">Product Category: {{ ucfirst($productCategory) }}</th>

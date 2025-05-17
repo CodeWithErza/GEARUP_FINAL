@@ -44,7 +44,7 @@ class OrderHistoryExport implements FromCollection, WithHeadings, WithMapping, W
         return [
             $order->order_number,
             $order->customer->name,
-            $order->created_at->format('M d, Y h:i A'),
+            $order->created_at->format('F d, Y h:i A'),
             $order->items->count(),
             number_format($order->subtotal, 2),
             number_format($order->tax, 2),

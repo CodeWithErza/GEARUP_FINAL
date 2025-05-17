@@ -105,7 +105,7 @@
                 <tr>
                     <td>{{ $order->order_number }}</td>
                     <td>{{ $order->customer->name }}</td>
-                    <td>{{ $order->created_at->format('M d, Y h:i A') }}</td>
+                    <td>{{ $order->created_at->format('F d, Y h:i A') }}</td>
                     <td>{{ $order->items->count() }}</td>
                     <td>{{ number_format($order->total, 2) }}</td>
                     <td>

@@ -214,7 +214,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Update sales and orders count
-                    document.getElementById('today-sales').textContent = `₱${data.today_sales}`;
+                    document.getElementById('today-sales').textContent = `₱${parseFloat(data.today_sales).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                     document.getElementById('today-orders').textContent = data.today_orders;
 
                     // Update recent orders table
@@ -224,7 +224,7 @@
                             <td class="py-1">${order.order_number}</td>
                             <td class="py-1">${order.date}</td>
                             <td class="py-1">${order.items_count}</td>
-                            <td class="text-end py-1">₱${order.total}</td>
+                            <td class="text-end py-1">₱${parseFloat(order.total).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                             <td class="py-1">
                                 <span class="badge text-bg-${order.status === 'completed' ? 'success' : order.status === 'cancelled' ? 'danger' : 'info'}">
                                     ${order.status}
@@ -265,7 +265,7 @@
                             <div class="product-name text-truncate" style="max-width: 150px;">${product.name}</div>
                         </div>
                     </td>
-                    <td class="text-end py-1 fw-bold">₱${product.total_sales}</td>
+                    <td class="text-end py-1 fw-bold">₱${parseFloat(product.total_sales).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                 </tr>
             `).join('');
         }

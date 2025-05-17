@@ -63,7 +63,7 @@
     </div>
 
     <div class="filters">
-        <p><strong>Date Range:</strong> {{ ucfirst($dateRange) }} ({{ $startDate->format('M d, Y') }} - {{ $endDate->format('M d, Y') }})</p>
+        <p><strong>Date Range:</strong> {{ ucfirst($dateRange) }} ({{ $startDate->format('F d, Y') }} - {{ $endDate->format('F d, Y') }})</p>
         <p><strong>Product Category:</strong> {{ ucfirst($productCategory) }}</p>
     </div>
 
